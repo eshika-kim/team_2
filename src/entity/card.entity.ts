@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { List } from './list.entity';
 export enum StateEnum {
@@ -19,7 +20,8 @@ export class Card {
   @PrimaryGeneratedColumn()
   card_id: number;
 
-  @ManyToOne(() => List, (list) => list.list_id)
+  @ManyToOne(() => List)
+  @JoinColumn({ name: 'list_id' })
   list_id: number;
 
   @Column('varchar', { length: 10 })
