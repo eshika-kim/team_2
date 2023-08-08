@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Card } from './card.entity';
@@ -15,14 +16,16 @@ export class Comment {
   @PrimaryGeneratedColumn()
   comment_id: number;
 
-  @ManyToOne(() => User, (user) => user.user_id)
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
   user_id: number;
 
-  @ManyToOne(() => Card, (card) => card.card_id)
+  @ManyToOne(() => Card)
+  @JoinColumn({ name: 'card_id' })
   card_id: number;
 
   @Column('varchar')
-  Desc: string;
+  comment: string;
 
   @Column('varchar')
   name: string;
