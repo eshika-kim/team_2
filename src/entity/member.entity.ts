@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Board } from './board.entity';
@@ -12,11 +13,13 @@ import { Board } from './board.entity';
 @Entity({ schema: 'team2', name: 'member' })
 export class Member {
   @PrimaryColumn()
-  @ManyToOne(() => User, (user) => user.user_id)
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
   user_id: number;
 
   @PrimaryColumn()
-  @ManyToOne(() => Board, (board) => board.board_id)
+  @ManyToOne(() => Board)
+  @JoinColumn({ name: 'board_id' })
   board_id: number;
 
   @CreateDateColumn()
