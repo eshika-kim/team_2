@@ -12,6 +12,7 @@ import {
 import { User } from './user.entity';
 import { Member } from './member.entity';
 import { Waiting } from './waiting.entity';
+import { List } from './list.entity';
 export enum BoardColor {
   RED = 'red',
   BLUE = 'blue',
@@ -34,6 +35,9 @@ export class Board {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user_id: number;
+
+  @OneToMany(() => List, (list) => list.board_id)
+  list: List[];
 
   @Column('varchar', { length: 20 })
   name: string;
