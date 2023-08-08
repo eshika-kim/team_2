@@ -7,6 +7,7 @@ import { TypeOrmConfigService } from './config/typeorm.config.service';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
     BoardModule,
-    UserModule, // 추가가 되었어요!
+    UserModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserService],

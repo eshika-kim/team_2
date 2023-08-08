@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Board } from './board.entity';
@@ -13,10 +14,12 @@ import { Board } from './board.entity';
 export class Waiting {
   @PrimaryColumn()
   @ManyToOne(() => User, (user) => user.user_id)
+  @JoinColumn({ name: 'user_id' })
   user_id: number;
 
   @PrimaryColumn()
   @ManyToOne(() => Board, (board) => board.board_id)
+  @JoinColumn({ name: 'board_id' })
   board_id: number;
 
   @CreateDateColumn()
