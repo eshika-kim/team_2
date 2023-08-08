@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ColumnController } from './column.controller';
+import { ColumnController } from './list.controller';
 
 describe('ColumnController', () => {
   let controller: ColumnController;
