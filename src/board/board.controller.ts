@@ -34,11 +34,11 @@ export class BoardController {
     @Param('board_id') board_id: number,
     @Body() data: UpdateBoardDto,
   ) {
-    return await this.boardService.updateBoard(board_id, data.name);
+    return await this.boardService.updateBoard(board_id, data.name, data.color, data.description);
   }
 
   @Delete('/board/:board_id')
-  async deleteArticle(@Param('board_id') articleId: number) {
+  async deleteArticle(@Param('board_id') board_id: number) {
     return await this.boardService.deleteArticle(board_id);
   }
 }
