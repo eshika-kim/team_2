@@ -1,25 +1,37 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsNumber, IsString, IsDate, IsEnum } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsDate,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { StateEnum } from '../../entity/card.entity';
 import { CreateCardDto } from './create-card.dto';
 
 export class UpdateCardDto extends PartialType(CreateCardDto) {
   @IsString()
-  readonly name: string;
+  @IsOptional()
+  readonly name: string | null;
 
   @IsString()
-  readonly color: string;
+  @IsOptional()
+  readonly color: string | null;
 
   @IsString()
-  readonly description: string;
+  @IsOptional()
+  readonly description: string | null;
 
   @IsDate()
-  readonly dueDate: Date;
+  @IsOptional()
+  readonly dueDate: Date | null;
 
   @IsNumber()
-  readonly order: number;
+  @IsOptional()
+  readonly order: number | null;
 
   @IsEnum(StateEnum)
-  readonly status: StateEnum;
+  @IsOptional()
+  readonly status: StateEnum | null;
   role: StateEnum;
 }

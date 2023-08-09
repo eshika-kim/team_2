@@ -16,12 +16,12 @@ import { DeleteCardDto } from 'src/dto/card/delete-card.dto';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
-  @Get('')
+  @Get('/')
   async getCard() {
     return await this.cardService.getCard();
   }
 
-  @Post('')
+  @Post('/')
   createCard(@Body() data: CreateCardDto) {
     return this.cardService.createCard(
       data.name,
