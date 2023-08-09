@@ -11,6 +11,9 @@ import { CommentService } from './comment.service';
 import { CreateCommentDto } from 'src/dto/comment/create-comment.dto';
 import { UpdateCommentDto } from 'src/dto/comment/update-comment.dto';
 
+// 유저의 정보는 어디서 가져오는가?
+// 캐시를 쓴다면 캐시로부터 가져와야함.
+
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}

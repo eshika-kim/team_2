@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/mapped-types';
-import { CreateUserDto } from '../create-user.dto';
+import { CreateUserDto } from './create-user.dto';
 
 export class DeleteUserDto extends PickType(CreateUserDto, [
   'password',
-  'confirmPassword',
+  'passwordConfirm',
 ] as const) {}
