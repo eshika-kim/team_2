@@ -26,7 +26,6 @@ export class CommentController {
     @Param('card_id') card_id: number,
     @Body() data: CreateCommentDto
   ) {
-    console.log(data);
     return this.commentService.createComment(card_id, data.comment);
   }
   @Put('/:comment_id')

@@ -29,7 +29,7 @@ export class User {
 
   @Index({ unique: true })
   @Column('varchar')
-  id: string;
+  email: string;
 
   @Column('varchar', { length: 10 })
   name: string;
