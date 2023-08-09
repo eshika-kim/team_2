@@ -12,7 +12,7 @@ export class CreateCardDto {
   readonly description: string;
 
   @IsDate()
-  readonly duedate: Date;
+  readonly dueDate: Date;
 
   @IsNumber()
   readonly order: number;

@@ -34,7 +34,7 @@ export class Card {
   description: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  duedate: Date;
+  dueDate: Date;
 
   @Column({ type: 'enum', enum: StateEnum, default: StateEnum.TODO })
   state: StateEnum;
