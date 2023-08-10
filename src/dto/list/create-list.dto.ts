@@ -1,6 +1,6 @@
 import { IsNumber, IsString, Length } from 'class-validator';
 
-export class CreateColumnDto {
+export class CreateListDto {
   @IsString()
   @Length(10, 40)
   readonly name: string;

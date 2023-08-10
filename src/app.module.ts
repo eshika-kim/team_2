@@ -37,12 +37,16 @@ import { JwtConfigService } from './config/jwt.config.service';
     CardModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService],
+  providers: [AppService, UserService, AuthMiddleware],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({ path: 'user/update', method: RequestMethod.PUT });
+    consumer.apply(AuthMiddleware).forRoutes(
+      { path: 'user/update', method: RequestMethod.PUT },
+      {
+        path: 'board/member/:board_id',
+        method: RequestMethod.POST,
+      },
+    );
   }
 }

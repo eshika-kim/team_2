@@ -1,4 +1,5 @@
 import { IsNumber, IsString, Length } from 'class-validator';
+import { BoardColor } from 'src/entity/board.entity';
 
 export class CreateBoardDto {
   @IsString()
@@ -6,8 +7,8 @@ export class CreateBoardDto {
   readonly name: string;
 
   @IsString()
-  readonly color: string;
+  readonly color: BoardColor;
 
-  @IsNumber()
+  @IsString()
   readonly description: string;
 }
