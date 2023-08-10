@@ -30,15 +30,20 @@ import { AuthMiddleware } from './auth/auth.middleware';
     CardModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService, AuthMiddleware],
+  providers: [
+    AppService,
+    UserService,
+    // AuthMiddleware
+  ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({
-        path: 'board/member/:board_id',
-        method: RequestMethod.POST,
-      });
-  }
+export class AppModule {
+  // implements NestModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(AuthMiddleware)
+  //     .forRoutes({
+  //       path: 'board/member/:board_id',
+  //       method: RequestMethod.POST,
+  //     });
+  // }
 }
