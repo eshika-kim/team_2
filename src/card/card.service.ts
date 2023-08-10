@@ -47,8 +47,8 @@ export class CardService {
     state: StateEnum,
   ) {
     this.cardRepository.query(
-      `INSERT INTO list (name, color, description,dueDate,state,) 
-              VALUES (${list_id}, ${name}, ${color}, ${description}, ${dueDate}, ${state}, (SELECT COALESCE(max, 1) FROM (SELECT (MAX(order) + 1) AS max FROM list where list_id = ${list_id}) tmp))`,
+      `INSERT INTO list (list_id, name, color, description,dueDate,state,) 
+              VALUES (${list_id}, ${name}, ${color}, ${description}, ${dueDate}, ${state}, (SELECT COALESCE(max, 1) FROM (SELECT (MAX(order) + 1) AS max FROM card where list_id = ${list_id}) tmp))`,
     );
   }
 
