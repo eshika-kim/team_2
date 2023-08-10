@@ -8,6 +8,7 @@ import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommentModule } from './comment/comment.module';
+import { CardModule } from './card/card.module'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CommentModule } from './comment/comment.module';
     BoardModule,
     UserModule,
     CommentModule,
+    CardModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserService],
