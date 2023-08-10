@@ -16,7 +16,7 @@ export class AuthMiddleware implements NestMiddleware {
       if (!authHeader) {
         throw new UnauthorizedException('JWT not found');
       }
-      const authkey = authHeader.authentication;
+      const authkey = authHeader.Authentication;
       const [authType, token] = authkey.split(' ');
       if (authType !== 'Bearer' || !token) {
         throw new UnauthorizedException(

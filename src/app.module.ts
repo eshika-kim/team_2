@@ -18,6 +18,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/jwt.config.service';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     }),
     BoardModule,
     UserModule,
+    ListModule,
     CommentModule,
     CardModule,
   ],
@@ -49,11 +51,14 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes(
       { path: 'user/update', method: RequestMethod.PUT },
+      { path: 'board', method: RequestMethod.POST },
       {
         path: 'board/member/:board_id',
         method: RequestMethod.POST,
       },
+      { path: 'comment/:card_id', method: RequestMethod.POST },
+      { path: 'comment/:comment_id', method: RequestMethod.PUT },
+      { path: 'comment/:comment_id', method: RequestMethod.DELETE },
     );
   }
-
 }

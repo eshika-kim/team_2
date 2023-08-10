@@ -34,8 +34,14 @@ export class BoardService {
       .getMany();
   }
 
-  async createBoard(name: string, color: BoardColor, description: string) {
+  async createBoard(
+    user_id: number,
+    name: string,
+    color: BoardColor,
+    description: string,
+  ) {
     this.boardRepository.insert({
+      user_id,
       name,
       color,
       description,
