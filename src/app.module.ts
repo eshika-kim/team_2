@@ -17,6 +17,7 @@ import { CardModule } from './card/card.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/jwt.config.service';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -30,6 +31,11 @@ import { JwtConfigService } from './config/jwt.config.service';
       imports: [ConfigModule],
       useClass: JwtConfigService,
       inject: [ConfigService],
+    }),
+    CacheModule.register({
+      ttl: 60000,
+      max: 100,
+      isGlobal: true,
     }),
     BoardModule,
     UserModule,

@@ -3,7 +3,7 @@ import { CreateUserDto } from './create-user.dto';
 import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
 
 export class UpdateUserDto extends PickType(CreateUserDto, [
-  'name',
+  'email',
   'password',
 ] as const) {
   @IsString()

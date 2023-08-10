@@ -10,7 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
 
   async use(req: any, res: any, next: Function) {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.auth;
 
     if (!authHeader) {
       throw new UnauthorizedException('JWT not found');

@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entity/user.entity';
 import _ from 'lodash';
+import { CACHE_MANAGER } from '@nestjs/cache-manager/dist';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
@@ -47,7 +49,7 @@ export class UserService {
   }
   async login(email: string, password: string) {
     const userConfirm = await this.getUserInfo(email);
-    if (!_.isNil(userConfirm)) {
+    if (_.isNil(userConfirm)) {
       throw new NotFoundException(`User not found. user email: ${email}`);
     }
     if (userConfirm.password !== password) {
@@ -58,7 +60,7 @@ export class UserService {
     return accessToken;
   }
 
-  //   updateUser(name: string, password: string, newPassword: string) {
-  //     return this.userRepository.update(userId, { name, password, newPassword });
-  //   }
+  updateUser(name: string, password: string, newPassword: string) {
+    return this.userRepository.update(name, { name, password: newPassword });
+  }
 }

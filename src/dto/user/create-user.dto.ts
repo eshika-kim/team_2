@@ -8,7 +8,7 @@ import {
 
 export class CreateUserDto {
   @IsEmail()
-  readonly eamil: string;
+  readonly email: string;
 
   @IsString()
   @MinLength(4)
