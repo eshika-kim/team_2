@@ -1,4 +1,10 @@
-import { IsNumber, IsString, IsDate, IsEnum } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsDate,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { StateEnum } from '../../entity/card.entity';
 
 export class CreateCardDto {
@@ -12,12 +18,11 @@ export class CreateCardDto {
   readonly description: string;
 
   @IsDate()
-  readonly duedate: Date;
-
-  @IsNumber()
-  readonly order: number;
+  @IsOptional()
+  readonly dueDate: Date | null;
 
   @IsEnum(StateEnum)
-  readonly status: StateEnum;
+  @IsOptional()
+  readonly status: StateEnum | null;
   role: StateEnum;
 }

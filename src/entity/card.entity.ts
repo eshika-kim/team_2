@@ -33,8 +33,8 @@ export class Card {
   @Column('varchar', { length: 100 })
   description: string;
 
-  @Column({ type: 'timestamp' })
-  duedate: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  dueDate: Date;
 
   @Column({ type: 'enum', enum: StateEnum, default: StateEnum.TODO })
   state: StateEnum;
