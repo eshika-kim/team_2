@@ -5,6 +5,8 @@ import { Board } from 'src/entity/board.entity';
 import { Member } from 'src/entity/member.entity';
 import { Waiting } from 'src/entity/waiting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Member } from 'src/entity/member.entity';
+import { Waiting } from 'src/entity/waiting.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, Member, Waiting])],

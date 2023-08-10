@@ -20,6 +20,10 @@ export class CommentService {
     });
   }
   createComment(card_id: number, comment: string) {
+    // 댓글 달기 전에 존재하는 회원인지, 인가(멤버)된 회원인지
+    // 존재하는 회원을 검색할 필요는 없다. 인가된 회원인가 아닌가를 검색하면
+    // 존재하는 회원임과 인가된 회원임을 알 수 있기 때문에
+
     return this.commentRepository.insert({
       card_id,
       name: 'test', // 아직 user 부분 못만들어서
