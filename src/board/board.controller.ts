@@ -6,9 +6,10 @@ import {
   Param,
   Post,
   Put,
-  Query,
+  Res,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
+import { Response } from 'express';
 import { CreateBoardDto } from '../dto/board/create-board.dto';
 import { UpdateBoardDto } from '../dto/board/update-board.dto';
 
@@ -16,13 +17,17 @@ import { UpdateBoardDto } from '../dto/board/update-board.dto';
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
-  @Get('/board')
+  @Get('/')
   async getBoards() {
     return await this.boardService.getBoards();
   }
 
-  @Post('/board')
-  createBoard(@Body() data: CreateBoardDto) {
+  @Post('/')
+  createBoard(
+    @Body() data: CreateBoardDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = res.locals.user;
     return this.boardService.createBoard(
       data.name,
       data.color,
@@ -36,12 +41,20 @@ export class BoardController {
   }
 
   @Post('/waiting/:board_id')
-  createWaiting(@Param('board_id') board_id: number) {
+  createWaiting(
+    @Param('board_id') board_id: number,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = res.locals.user;
     return this.boardService.createWaiting(board_id);
   }
 
   @Post('/member/:board_id')
-  createMember(@Param('board_id') board_id: number) {
+  createMember(
+    @Param('board_id') board_id: number,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = res.locals.user;
     return this.boardService.createMember(board_id);
   }
 
@@ -55,7 +68,7 @@ export class BoardController {
     return await this.boardService.deleteMember(board_id);
   }
 
-  @Put('/board/:board_id')
+  @Put('/:board_id')
   async updateBoard(
     @Param('board_id') board_id: number,
     @Body() data: UpdateBoardDto,
@@ -68,7 +81,7 @@ export class BoardController {
     );
   }
 
-  @Delete('/board/:board_id')
+  @Delete('/:board_id')
   async deleteBoard(@Param('board_id') board_id: number) {
     return await this.boardService.deleteBoard(board_id);
   }

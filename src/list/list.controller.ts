@@ -1,64 +1,48 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ListService } from './list.service';
+import { CreateListDto } from '../dto/list/create-list.dto';
+import { UpdateListDto } from '../dto/list/update-list.dto';
 
-@Controller('column')
-export class ColumnController {
-  constructor(private readonly boardService: ListService) {}
+@Controller('list')
+export class listController {
+  constructor(private readonly cardService: ListService) {}
 
-  @Get('/board')
-  async getBoards() {
-    return await this.boardService.getBoards();
+  @Get('/:board_id')
+  async getList(@Param('board_id') board_id: number) {
+    return await this.cardService.getList(board_id);
   }
 
-  @Post('/board')
-  createBoard(@Body() data: CreateBoardDto) {
-    return this.boardService.createBoard(
-      data.name,
-      data.color,
-      data.description,
-    );
+  @Post('/:board_id')
+  createList(@Param('board_id') board_id: number, @Body() data: CreateListDto) {
+    return this.cardService.createList(board_id, data.name);
   }
 
-  @Get('/waiting')
-  async getWaitings() {
-    return await this.boardService.getWaitings();
+  @Patch('/:list_id')
+  updateList(@Param('list_id') list_id: number, @Body() data: UpdateListDto) {
+    return this.cardService.updateList(list_id, data.name);
   }
 
-  @Post('/waiting/:board_id')
-  createWaiting(@Param('board_id') board_id: number) {
-    return this.boardService.createWaiting(board_id);
-  }
-
-  @Post('/member/:board_id')
-  createMember(@Param('board_id') board_id: number) {
-    return this.boardService.createMember(board_id);
-  }
-
-  @Delete('/waiting/:board_id')
-  async deleteWaiting(@Param('board_id') board_id: number) {
-    return await this.boardService.deleteWaiting(board_id);
-  }
-
-  @Delete('/member/:board_id')
-  async deleteMember(@Param('board_id') board_id: number) {
-    return await this.boardService.deleteMember(board_id);
-  }
-
-  @Put('/board/:board_id')
-  async updateBoard(
-    @Param('board_id') board_id: number,
-    @Body() data: UpdateBoardDto,
+  //리스트 순서 변경
+  @Patch('listOrder/:list_id')
+  updateListOrder(
+    @Param('list_id') list_id: number,
+    @Body() data: UpdateListDto,
+    @Query('boad_id') board_id: number,
   ) {
-    return await this.boardService.updateBoard(
-      board_id,
-      data.name,
-      data.color,
-      data.description,
-    );
+    return this.cardService.updateListOrder(board_id, list_id, data.order);
   }
 
-  @Delete('/board/:board_id')
-  async deleteBoard(@Param('board_id') board_id: number) {
-    return await this.boardService.deleteBoard(board_id);
+  @Delete('/:list_id')
+  deleteList(@Param('list_id') list_id: number) {
+    return this.cardService.deleteList(list_id);
   }
 }
