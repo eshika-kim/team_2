@@ -26,7 +26,6 @@ export class UserService {
     });
   }
   async createUser(email: string, name: string, password: string) {
-    // 이미 존재하는 이메일인지 확인 (중복확인)
     const existUser = await this.getUserInfo(email);
     if (!_.isNil(existUser)) {
       throw new ConflictException(
@@ -38,12 +37,10 @@ export class UserService {
       name,
       password,
     });
-    // jwt 토큰에 담을 회원의 정보
     const payload = {
       id: insertUser.identifiers[0].id,
       name: insertUser.identifiers[0].name,
     };
-    // jwt에 처넣음
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
   }
@@ -69,5 +66,15 @@ export class UserService {
       throw new UnauthorizedException('User password is not corresponded');
     }
     return this.userRepository.update(user_id, { password: newPassword });
+  }
+
+  async deleteUser(user_id: number, password: string, passwordConfirm: string) {
+    const confirmUserPass = await this.userRepository.findOne({
+      where: { user_id },
+    });
+    if (!confirmUserPass && password !== confirmUserPass.password) {
+      throw new UnauthorizedException('User password is not corresponded');
+    }
+    return this.userRepository.softDelete(user_id);
   }
 }

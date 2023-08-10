@@ -20,9 +20,9 @@ export class ListService {
   }
 
   // 카드 생성
-  createList(board_id: number, name: string) {
+  createList(board_id: number, name: string, order: number) {
     this.listRepository.query(
-      `INSERT INTO list (board_id, name, order) VALUES (${board_id}, ${name}, (SELECT COALESCE(max, 1) FROM (SELECT (MAX(order) + 1) AS max FROM list where board_id = ${board_id}) tmp))`,
+      `INSERT INTO list (board_id, name, \`order\`) VALUES (${board_id}, '${name}', (SELECT COALESCE(max, 1) FROM (SELECT (MAX(${order}) + 1) AS max FROM list where board_id = ${board_id}) tmp))`,
     );
   }
 

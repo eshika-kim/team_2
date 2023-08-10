@@ -6,13 +6,20 @@ import {
   Delete,
   Param,
   Body,
+  Req,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from 'src/dto/comment/create-comment.dto';
 import { UpdateCommentDto } from 'src/dto/comment/update-comment.dto';
-
-// 유저의 정보는 어디서 가져오는가?
-// 캐시를 쓴다면 캐시로부터 가져와야함.
+import { Request, Response } from 'express';
+interface RequestWithLocals extends Request {
+  locals: {
+    user: {
+      id: number;
+      name: string;
+    };
+  };
+}
 
 @Controller('comment')
 export class CommentController {
@@ -24,19 +31,36 @@ export class CommentController {
   @Post('/:card_id')
   postComment(
     @Param('card_id') card_id: number,
-    @Body() data: CreateCommentDto
+    @Body() data: CreateCommentDto,
+    @Req() request: RequestWithLocals,
   ) {
-    return this.commentService.createComment(card_id, data.comment);
+    const auth = request.locals.user;
+    return this.commentService.createComment(
+      auth.id,
+      auth.name,
+      card_id,
+      data.comment,
+    );
   }
   @Put('/:comment_id')
   async updateComment(
     @Param('comment_id') comment_id: number,
-    @Body() data: UpdateCommentDto
+    @Body() data: UpdateCommentDto,
+    @Req() request: RequestWithLocals,
   ) {
-    return await this.commentService.updateComment(comment_id, data.comment);
+    const auth = request.locals.user;
+    return await this.commentService.updateComment(
+      auth.id,
+      comment_id,
+      data.comment,
+    );
   }
   @Delete('/:comment_id')
-  async deleteComment(@Param('comment_id') comment_id: number) {
-    return await this.commentService.deleteComment(comment_id);
+  async deleteComment(
+    @Param('comment_id') comment_id: number,
+    @Req() request: RequestWithLocals,
+  ) {
+    const auth = request.locals.user;
+    return await this.commentService.deleteComment(auth.id, comment_id);
   }
 }
