@@ -1,7 +1,7 @@
 {
   "trailingComma": "all",
   "tapWidth": 2,
-  "printWidth": 200,
+  "printWidth": 80,
   "semi": true,
   "rangeStart": 0,
   "singleQuote": true,
