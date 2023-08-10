@@ -16,7 +16,7 @@ import { Cache } from 'cache-manager';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async getUserInfo(email: string) {
@@ -30,7 +30,7 @@ export class UserService {
     const existUser = await this.getUserInfo(email);
     if (!_.isNil(existUser)) {
       throw new ConflictException(
-        `This email already has been using. email: ${email}`
+        `This email already has been using. email: ${email}`,
       );
     }
     const insertUser = await this.userRepository.insert({
@@ -60,7 +60,14 @@ export class UserService {
     return accessToken;
   }
 
-  updateUser(name: string, password: string, newPassword: string) {
-    return this.userRepository.update(name, { name, password: newPassword });
+  async updateUser(user_id: number, password: string, newPassword: string) {
+    const confirmUserPass = await this.userRepository.findOne({
+      where: { user_id },
+      select: ['password'],
+    });
+    if (!confirmUserPass && password !== confirmUserPass.password) {
+      throw new UnauthorizedException('User password is not corresponded');
+    }
+    return this.userRepository.update(user_id, { password: newPassword });
   }
 }

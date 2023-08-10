@@ -14,6 +14,14 @@ import { LoginUserDto } from 'src/dto/user/login-user.dto';
 import { UpdateUserDto } from 'src/dto/user/update-user.dto';
 import * as cookieParser from 'cookie-parser';
 import { Request, Response } from 'express';
+interface RequestWithLocals extends Request {
+  locals: {
+    user: {
+      id: number;
+      name: string;
+    };
+  };
+}
 
 @Controller('user')
 export class UserController {
@@ -37,15 +45,14 @@ export class UserController {
       data.email,
       data.password,
     );
-    response.cookie('authentication', authentication);
+    response.cookie('Authentication', 'Bearer ' + authentication);
   }
 
   @Put('/update')
-  updateUser(@Body() data: UpdateUserDto, @Req() request: Request) {
-    const auth = request.cookies;
-    console.log(auth);
+  updateUser(@Body() data: UpdateUserDto, @Req() request: RequestWithLocals) {
+    const auth = request.locals.user;
     return this.userService.updateUser(
-      data.email,
+      auth.id,
       data.password,
       data.newPassword,
     );

@@ -43,7 +43,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     CardModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService, AuthMiddleware],
+  providers: [AppService, AuthMiddleware],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
