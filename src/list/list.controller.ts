@@ -13,7 +13,7 @@ import { CreateListDto } from '../dto/list/create-list.dto';
 import { UpdateListDto } from '../dto/list/update-list.dto';
 
 @Controller('list')
-export class listController {
+export class ListController {
   constructor(private readonly cardService: ListService) {}
 
   @Get('/:board_id')
