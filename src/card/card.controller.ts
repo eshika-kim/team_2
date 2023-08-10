@@ -6,6 +6,8 @@ import {
   Param,
   Post,
   Put,
+  Patch,
+  Query,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardDto } from 'src/dto/card/create-card.dto';
@@ -29,14 +31,15 @@ export class CardController {
   }
 
   // 카드 생성
-  @Post('/')
-  createCard(@Body() data: CreateCardDto) {
+  @Post('/:list_id')
+  createCard(@Param('list_id') list_id: number, @Body() data: CreateCardDto) {
     return this.cardService.createCard(
+      list_id,
       data.name,
       data.color,
       data.description,
       data.dueDate,
-      data.status
+      data.status,
     );
   }
 
@@ -49,8 +52,28 @@ export class CardController {
       data.color,
       data.description,
       data.dueDate,
-      data.status
+      data.status,
     );
+  }
+
+  // 카드 순서 변경
+  @Patch('/order/:card_id')
+  updateCardOrder(
+    @Param('card_id') card_id: number,
+    @Body() data: UpdateCardDto,
+    @Query('list_id') list_id: number,
+  ) {
+    return this.cardService.updateCardOrder(card_id, list_id, data.order);
+  }
+
+  //카드 리스트 변경
+  @Patch('/cardWhere/:card_id')
+  updateCardWhere(
+    @Param('card_id') card_id: number,
+    @Body() data: UpdateCardDto,
+    @Query('list_id') list_id: number,
+  ) {
+    return this.cardService.updateCardWhere(card_id, list_id, data.order);
   }
 
   // 카드 삭제

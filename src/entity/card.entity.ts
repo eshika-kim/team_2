@@ -33,6 +33,9 @@ export class Card {
   @Column('varchar', { length: 100 })
   description: string;
 
+  @Column()
+  order: number;
+
   @Column({ type: 'timestamp', nullable: true })
   dueDate: Date;
 

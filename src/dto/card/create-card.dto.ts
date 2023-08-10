@@ -17,6 +17,9 @@ export class CreateCardDto {
   @IsString()
   readonly description: string;
 
+  @IsNumber()
+  readonly order: number;
+
   @IsDate()
   @IsOptional()
   readonly dueDate: Date | null;

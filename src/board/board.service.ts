@@ -54,7 +54,7 @@ export class BoardService {
   async createWaiting(board_id: number) {
     this.waitingRepository.insert({
       board_id,
-      // user_id,
+      user_id: null,
     });
 
     await this.deleteWaiting(board_id);
@@ -63,16 +63,16 @@ export class BoardService {
   async createMember(board_id: number) {
     this.memberRepository.insert({
       board_id,
-      // user_id,
+      user_id: null,
     });
   }
 
   async deleteWaiting(board_id: number) {
-    await this.waitingRepository.delete({ board_id });
+    await this.waitingRepository.delete({ board_id, user_id: null });
   }
 
   async deleteMember(board_id: number) {
-    await this.memberRepository.delete({ board_id });
+    await this.memberRepository.delete({ board_id, user_id: null });
   }
 
   async updateBoard(

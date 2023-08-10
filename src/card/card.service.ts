@@ -14,7 +14,7 @@ import { Comment } from 'src/entity/comment.entity';
 export class CardService {
   constructor(
     @InjectRepository(Card) private cardRepository: Repository<Card>,
-    @InjectRepository(Comment) private commentRepository: Repository<Comment>
+    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
   ) {}
 
   // 카드 목록 가져오기
@@ -39,19 +39,17 @@ export class CardService {
 
   // 카드 생성
   createCard(
+    list_id: number,
     name: string,
     color: string,
     description: string,
     dueDate: Date,
-    state: StateEnum
+    state: StateEnum,
   ) {
-    this.cardRepository.insert({
-      name,
-      color,
-      description,
-      dueDate,
-      state,
-    });
+    this.cardRepository.query(
+      `INSERT INTO list (list_id, name, color, description,dueDate,state,) 
+              VALUES (${list_id}, ${name}, ${color}, ${description}, ${dueDate}, ${state}, (SELECT COALESCE(max, 1) FROM (SELECT (MAX(order) + 1) AS max FROM card where list_id = ${list_id}) tmp))`,
+    );
   }
 
   // 카드 수정
@@ -61,7 +59,7 @@ export class CardService {
     color: string,
     description: string,
     dueDate: Date,
-    state: StateEnum
+    state: StateEnum,
   ) {
     await this.checkCard(user_id);
     this.cardRepository.update(user_id, {
@@ -71,6 +69,22 @@ export class CardService {
       dueDate,
       state,
     });
+  }
+
+  async updateCardOrder(card_id: number, list_id: number, order: number) {
+    await this.cardRepository.query(
+      `UPDATE list SET order =
+            CASE WHEN order >= ${order} AND card_id != ${card_id} THEN ${order} + 1
+                 WHEN card_id = ${card_id} THEN ${order}
+                 ELSE order
+            END
+        WHERE list_id = ${list_id};`,
+    );
+  }
+
+  async updateCardWhere(card_id: number, list_id: number, order: number) {
+    await this.cardRepository.update(card_id, { list_id });
+    await this.updateCardOrder(card_id, list_id, order);
   }
 
   // 카드 삭제

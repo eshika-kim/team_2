@@ -28,13 +28,13 @@ export class ListService {
 
   // 카드 수정
   async updateList(list_id: number, name: string) {
-    this.listRepository.update(list_id, {
+    await this.listRepository.update(list_id, {
       name,
     });
   }
 
   async updateListOrder(board_id: number, list_id: number, order: number) {
-    this.listRepository.query(
+    await this.listRepository.query(
       `UPDATE list SET order =
             CASE WHEN order >= ${order} AND list_id != ${list_id} THEN ${order} + 1
                  WHEN list_id = ${list_id} THEN ${order}
