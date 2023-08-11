@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // 쿠키값 확인하여 버튼 상태 설정
   function checkLoginStatus() {
     let cookies = document.cookie;
-    if (cookies.includes('Authorization=Bearer%20')) {
+    console.log(cookies);
+    if (cookies.includes('Authentication=Bearer%20')) {
       loginButton.classList.add('d-none'); // 로그인 버튼 숨김
       logoutButton.classList.remove('d-none'); // 로그아웃 버튼 표시
       waitingButton.classList.remove('d-none'); // 멤버버튼 표시
@@ -70,28 +71,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirm = document.querySelector('#confirm').value;
     const name = document.querySelector('#name').value;
 
-    // 데이터 객체 생성
-    const userData = {
-      email: email,
-      password: password,
-      confirm: confirm,
-      name: name,
-    };
-
-    fetch('/user/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    axios({
+      url: 'http://localhost:3000/user/sign',
+      method: 'post',
+      data: {
+        email: email,
+        password: password,
+        name: name,
+        passwordConfirm: confirm,
       },
-      body: JSON.stringify(userData),
     })
       .then(async (res) => {
-        const successMessage = document.createElement('div');
-        successMessage.classList.add('alert', 'alert-success', 'mt-3');
-        successMessage.textContent = '회원 가입이 성공적으로 완료되었습니다.';
+        console.log(res.successMessage);
 
-        const modalBody = document.querySelector('#signupModal .modal-body');
-        modalBody.appendChild(successMessage);
+        alert('회원가입이 완료되었습니다.');
 
         location.reload();
       })
