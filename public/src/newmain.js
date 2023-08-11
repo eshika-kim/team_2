@@ -102,10 +102,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalBody = document.querySelector('#loginModal .modal-body');
         modalBody.appendChild(successMessage);
 
-        window.location.href = `mypage.html`;
+        location.reload();
       })
       .catch((error) => {
-        alert(error.request.response);
+        console.error('에러 발견: ', error);
+        console.log('Error response: ', error.response);
       });
   });
 
