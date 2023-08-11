@@ -13,8 +13,12 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.use(cookieParser());
-
   app.useStaticAssets('public');
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+
   await app.listen(3000);
 
   if (module.hot) {
