@@ -49,16 +49,16 @@ import { ListModule } from './list/list.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(
-      { path: 'user/update', method: RequestMethod.PUT },
-      { path: 'board', method: RequestMethod.POST },
-      {
-        path: 'board/member/:board_id',
-        method: RequestMethod.POST,
-      },
-      { path: 'comment/:card_id', method: RequestMethod.POST },
-      { path: 'comment/:comment_id', method: RequestMethod.PUT },
-      { path: 'comment/:comment_id', method: RequestMethod.DELETE },
-    );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: 'user/update', method: RequestMethod.PUT },
+        { path: 'board', method: RequestMethod.POST },
+        { path: 'board/member/:board_id', method: RequestMethod.POST },
+        { path: 'board/waiting/:board_id', method: RequestMethod.POST },
+        { path: 'comment/:card_id', method: RequestMethod.POST },
+        { path: 'comment/:comment_id', method: RequestMethod.PUT },
+        { path: 'comment/:comment_id', method: RequestMethod.DELETE },
+      );
   }
 }
