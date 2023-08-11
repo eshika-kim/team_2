@@ -33,11 +33,7 @@ export class BoardController {
   }
 
   @Post('/')
-  createBoard(
-    @Body() data: CreateBoardDto,
-    @Res({ passthrough: true }) res: Response,
-    @Req() request: RequestWithLocals,
-  ) {
+  createBoard(@Body() data: CreateBoardDto, @Req() request: RequestWithLocals) {
     const user = request.locals.user;
     return this.boardService.createBoard(
       user.id,

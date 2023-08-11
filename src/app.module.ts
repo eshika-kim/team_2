@@ -54,6 +54,7 @@ export class AppModule implements NestModule {
       .forRoutes(
         { path: 'user/update', method: RequestMethod.PUT },
         { path: 'board', method: RequestMethod.POST },
+        { path: 'board', method: RequestMethod.GET },
         { path: 'board/member/:board_id', method: RequestMethod.POST },
         { path: 'board/waiting/:board_id', method: RequestMethod.POST },
         { path: 'comment/:card_id', method: RequestMethod.POST },
