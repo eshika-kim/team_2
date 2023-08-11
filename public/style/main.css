@@ -1,0 +1,103 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #327fcc;
+  color: #ffffff;
+}
+
+.logo {
+  font-size: 24px;
+}
+
+.login-button {
+  margin-left: 10px;
+}
+
+/* 여백을 만드는 선 스타일 */
+.divider {
+  width: 100%;
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* 카드 영역 스타일 */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* 왼쪽으로 정렬되도록 설정 */
+  padding: 20px;
+}
+
+.board {
+  width: 200px;
+  height: 100px; /* 카드의 높이를 100px로 설정 */
+  margin: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드 영역 스타일 */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* 왼쪽으로 정렬되도록 설정 */
+  padding: 20px;
+}
+
+.board {
+  width: 200px;
+  height: 100px; /* 카드의 높이를 100px로 설정 */
+  margin: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.list {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 20px;
+}
+
+.sub-cards {
+  margin-top: 10px; /* 하위 카드와의 간격 */
+}
+
+.sub-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 5px; /* 하위 카드 간격 */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* 미디어 쿼리를 사용하여 반응형 스타일 적용 */
+@media (max-width: 768px) {
+  .board {
+    flex-basis: calc(50% - 10px); /* 작은 화면에서는 50%로 조정 */
+  }
+  .list {
+    flex-basis: calc(50% - 10px); /* 작은 화면에서는 50%로 조정 */
+  }
+}
+
+@media (max-width: 480px) {
+  .board {
+    flex-basis: 100%;
+  }
+  .list {
+    flex-basis: 100%;
+  }
+}
