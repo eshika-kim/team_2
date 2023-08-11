@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Length } from 'class-validator';
+import { IsNumber, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateListDto {
   @IsString()
@@ -6,5 +6,6 @@ export class CreateListDto {
   readonly name: string;
 
   @IsNumber()
+  @IsOptional()
   readonly order: number;
 }
