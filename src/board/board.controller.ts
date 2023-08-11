@@ -72,7 +72,6 @@ export class BoardController {
   }
 
 
-  // 웨이팅의 삭제에 해당하는 부분을 멤버 생성 시 해주는데 밑 로직 필요할까..?
   @Delete('/waiting/:board_id')
   async deleteWaiting(
     @Param('board_id') board_id: number,
