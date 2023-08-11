@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board, BoardColor } from '../entity/board.entity';
 import { Member } from '../entity/member.entity';
-import { Waiting } from 'src/entity/waiting.entity';
+import { Waiting } from '../entity/waiting.entity';
 
 @Injectable()
 export class BoardService {
@@ -57,24 +57,23 @@ export class BoardService {
       .getMany();
   }
 
-  async createWaiting(board_id: number) {
-    this.waitingRepository.insert({
+  async createWaiting(board_id: number, user_id: number) {
+    await this.waitingRepository.insert({
       board_id,
-      user_id: null,
+      user_id,
     });
-
-    await this.deleteWaiting(board_id);
   }
 
-  async createMember(board_id: number) {
+  async createMember(board_id: number, user_id: number) {
     this.memberRepository.insert({
       board_id,
-      user_id: null,
+      user_id,
     });
+    await this.deleteWaiting(board_id, user_id);
   }
 
-  async deleteWaiting(board_id: number) {
-    await this.waitingRepository.delete({ board_id, user_id: null });
+  async deleteWaiting(board_id: number, user_id: number) {
+    await this.waitingRepository.delete({ board_id, user_id });
   }
 
   async deleteMember(board_id: number) {
