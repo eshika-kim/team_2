@@ -59,14 +59,14 @@ function drop(event) {
 }
 
 const openModalButton = document.getElementById('openModalButton');
-const cardModal = document.getElementById('cardModal');
+const createCardModal = document.getElementById('createCardModal');
 const createCardButton = document.getElementById('createCardButton');
 const closeModalButton = document.getElementById('closeModalButton');
 const cardContainer = document.querySelector('.card-container');
 
 // 모달 창 열기
 openModalButton.addEventListener('click', () => {
-  cardModal.classList.add('visible');
+  createCardModal.classList.add('visible');
 });
 
 // 카드 생성
@@ -93,7 +93,7 @@ createCardButton.addEventListener('click', () => {
 
 // 모달 창 닫기
 closeModalButton.addEventListener('click', () => {
-  cardModal.classList.remove('visible');
+  createCardModal.classList.remove('visible');
 });
 
 const addMemberButton = document.getElementById('addMemberButton');
@@ -113,31 +113,4 @@ addMemberButton.addEventListener('click', () => {
     // 카드 컨테이너에 추가
     cardContainer.appendChild(card);
   }
-});
-
-const subCardsContainer = document.querySelectorAll('.sub-cards');
-const subcardModal = document.getElementById('subcardModal');
-const subcardContent = document.getElementById('subcardContent');
-const closeSubcardButton = document.getElementById('closeSubcardButton');
-
-// 각 하위 카드에 클릭 이벤트 리스너 추가
-subCardsContainer.forEach((container) => {
-  container.addEventListener('click', (event) => {
-    // 클릭한 하위 카드의 내용 가져오기
-    const subcardContent = event.target.textContent;
-
-    // 모달 창에 내용 표시
-    showSubcardDetails(subcardContent);
-  });
-});
-
-// 하위 카드 상세 내용을 모달 창에 표시하는 함수
-function showSubcardDetails(content) {
-  subcardContent.textContent = content;
-  subcardModal.style.display = 'block';
-}
-
-// 모달 닫기 버튼 클릭 시 모달 창 닫기
-closeSubcardButton.addEventListener('click', () => {
-  subcardModal.style.display = 'none';
 });

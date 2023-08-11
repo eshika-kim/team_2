@@ -39,12 +39,7 @@ export class BoardService {
       ])
       .getMany();
   }
-  // async getBoard(user_id:number, board_id: number) {
-  //   const board = await this.boardRepository.findOne({
-  //     where: {board_id},
-  //     select: [],
-  //   })
-  // }
+
   async createBoard(
     user_id: number,
     name: string,

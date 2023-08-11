@@ -62,6 +62,58 @@
         </div>
     </div>
 
+    <!-- 카드 생성을 위한 모달 -->
+    <div class="modal fade" id="createCardModal" tabindex="-1" aria-labelledby="createCardModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCardModalLabel">카드 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createBoardForm">
+                        <div class="mb-3">
+                            <label for="boardTitle" class="form-label">카드 이름</label>
+                            <input type="text" class="form-control" id="name" placeholder="카드 이름을 입력하세요" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="boardContent" class="form-label">카드 설명</label>
+                            <input class="form-control" id="description" placeholder="카드 설명을 입력하세요" required></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color">Color:</label>
+                            <select id="color">
+                                <option value="red">red</option>
+                                <option value="blue">blue</option>
+                                <option value="blue">yello</option>
+                                <option value="green">green</option>
+                                <option value="gray">gray</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="todoStatus">Status:</label>
+                            <select id="todoStatus">
+                                <option value="todo">todo</option>
+                                <option value="doing">doing</option>
+                                <option value="done">done</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateTime">Duedate:</label>
+                            <input type="datetime-local" id="dateTime">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitBoard">
+                        생성
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Axios 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
