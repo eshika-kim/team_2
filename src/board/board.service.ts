@@ -56,8 +56,6 @@ export class BoardService {
       board_id,
       user_id: null,
     });
-
-    await this.deleteWaiting(board_id);
   }
 
   async createMember(board_id: number) {
@@ -65,6 +63,8 @@ export class BoardService {
       board_id,
       user_id: null,
     });
+
+    await this.deleteWaiting(board_id);
   }
 
   async deleteWaiting(board_id: number) {

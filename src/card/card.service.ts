@@ -73,7 +73,7 @@ export class CardService {
 
   async updateCardOrder(card_id: number, list_id: number, order: number) {
     await this.cardRepository.query(
-      `UPDATE list SET order =
+      `UPDATE card SET order =
             CASE WHEN order >= ${order} AND card_id != ${card_id} THEN ${order} + 1
                  WHEN card_id = ${card_id} THEN ${order}
                  ELSE order
