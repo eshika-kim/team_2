@@ -57,8 +57,8 @@ export class BoardController {
     @Res({ passthrough: true }) res: Response,
     @Req() request: RequestWithLocals,
   ) {
-    const user = request.locals.user;
-    return this.boardService.createWaiting(board_id);
+    const user_id = request.locals.user.id;
+    return this.boardService.createWaiting(board_id, user_id);
   }
 
   @Post('/member/:board_id')
@@ -67,13 +67,19 @@ export class BoardController {
     @Res({ passthrough: true }) res: Response,
     @Req() request: RequestWithLocals,
   ) {
-    const user = request.locals.user;
-    return this.boardService.createMember(board_id);
+    const user_id = request.locals.user.id;
+    return this.boardService.createMember(board_id, user_id);
   }
 
+
+  // 웨이팅의 삭제에 해당하는 부분을 멤버 생성 시 해주는데 밑 로직 필요할까..?
   @Delete('/waiting/:board_id')
-  async deleteWaiting(@Param('board_id') board_id: number) {
-    return await this.boardService.deleteWaiting(board_id);
+  async deleteWaiting(
+    @Param('board_id') board_id: number,
+    @Req() request: RequestWithLocals,
+  ) {
+    const user_id = request.locals.user.id;
+    return await this.boardService.deleteWaiting(board_id, user_id);
   }
 
   @Delete('/member/:board_id')
