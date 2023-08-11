@@ -17,7 +17,7 @@ export class BoardService {
     @InjectRepository(Waiting) private waitingRepository: Repository<Waiting>,
   ) {}
 
-  async getBoards() {
+  async getBoards(user_id: number) {
     const board = this.boardRepository.createQueryBuilder('board');
 
     return await board
@@ -27,7 +27,7 @@ export class BoardService {
             .subQuery()
             .select('member.board_id')
             .from(Member, 'member')
-            .where(`member.user_id = 1 AND deletedAt IS NULL`)
+            .where(`member.user_id = ${user_id} AND deletedAt IS NULL`)
             .getQuery(),
       )
       .select(['board_id', 'user_id', 'name', 'color', 'description'])

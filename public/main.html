@@ -1,77 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login and Register Popup</title>
-    <link rel="stylesheet" href="./style/style.css" />
-    <script src="./src/script.js" defer></script>
-    <!-- axios 로드 -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  </head>
 
-  <body>
-    <header class="header">
-      <div class="logo">
-        <h1>2게더</h1>
-      </div>
-      <button class="login-button" id="loginButton">로그인</button>
-      <button class="login-button" id="logoutButton" style="display: none">
-        로그아웃
-      </button>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login and Register Popup</title>
+  <link rel="stylesheet" href="./style/style.css" />
+  <script src="./src/script.js" defer></script>
+  <!-- axios 로드 -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
 
-    <hr class="divider" />
-
-    <div class="card-container">
-      <a href="list.html" class="card-link">
-        <div class="board">보드 1</div>
-      </a>
-      <a href="list.html" class="card-link">
-        <div class="board">보드 2</div>
-      </a>
-      <a href="list.html" class="card-link">
-        <div class="board">보드 3</div>
-      </a>
-      <a href="list.html" class="card-link">
-        <div class="board">보드 4</div>
-      </a>
+<body>
+  <header class="header">
+    <div class="logo">
+      <h1>2게더</h1>
     </div>
+    <button class="login-button" id="loginButton">로그인</button>
+    <button class="login-button" id="logoutButton" style="display: none">
+      로그아웃
+    </button>
+  </header>
 
-    <!-- 로그인 팝업 -->
-    <div id="loginPopup" class="popup">
-      <h2>로그인</h2>
-      <form id="loginForm">
-        <label for="email">이메일:</label>
-        <input type="text" id="emailId" name="id" required />
-        <label for="loginPassword">비밀번호:</label>
-        <input type="password" id="loginPassword" name="password" required />
-        <button type="submit">로그인</button>
-        <button id="closeLoginPopup">닫기</button>
-      </form>
-      <button id="registerButton">회원가입</button>
-    </div>
+  <hr class="divider" />
 
-    <!-- 회원가입 팝업 -->
-    <div id="registerPopup" class="popup">
-      <h2>회원가입</h2>
-      <form id="registerForm">
-        <label for="registerEmail">이메일:</label>
-        <input type="text" id="registerEmail" name="id" required />
-        <label for="registerPassword">비밀번호:</label>
-        <input type="password" id="registerPassword" name="password" required />
-        <label for="registerPassword">비밀번호 확인:</label>
-        <input
-          type="password"
-          id="registerPasswordConfirm"
-          name="passwordConfirm"
-          required
-        />
-        <label for="registerName">이름:</label>
-        <input type="text" id="registerName" name="name" required />
-        <button type="submit">회원가입</button>
-        <button id="closeRegisterPopup">닫기</button>
-      </form>
-    </div>
-  </body>
+  <div class="card-container">
+    <a href="list.html" class="card-link">
+      <div class="board">보드 1</div>
+    </a>
+    <a href="list.html" class="card-link">
+      <div class="board">보드 2</div>
+    </a>
+    <a href="list.html" class="card-link">
+      <div class="board">보드 3</div>
+    </a>
+    <a href="list.html" class="card-link">
+      <div class="board">보드 4</div>
+    </a>
+  </div>
+
+  <!-- 로그인 팝업 -->
+  <div id="loginPopup" class="popup">
+    <h2>로그인</h2>
+    <form id="loginForm">
+      <label for="email">이메일:</label>
+      <input type="text" id="emailId" name="id" required />
+      <label for="loginPassword">비밀번호:</label>
+      <input type="password" id="loginPassword" name="password" required />
+      <button type="submit">로그인</button>
+      <button id="closeLoginPopup">닫기</button>
+    </form>
+    <button id="registerButton">회원가입</button>
+  </div>
+
+  <!-- 회원가입 팝업 -->
+  <div id="registerPopup" class="popup">
+    <h2>회원가입</h2>
+    <form id="registerForm">
+      <label for="registerEmail">이메일:</label>
+      <input type="text" id="registerEmail" name="id" required />
+      <label for="registerPassword">비밀번호:</label>
+      <input type="password" id="registerPassword" name="password" required />
+      <label for="registerPassword">비밀번호 확인:</label>
+      <input type="password" id="registerPasswordConfirm" name="passwordConfirm" required />
+      <label for="registerName">이름:</label>
+      <input type="text" id="registerName" name="name" required />
+      <button type="submit">회원가입</button>
+      <button id="closeRegisterPopup">닫기</button>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+  </script>
+  <script src="./src/script.js"></script>
+</body>
+
 </html>

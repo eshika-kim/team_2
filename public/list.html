@@ -13,13 +13,12 @@
         <div class="logo">
             <h1>2게더</h1>
         </div>
+        <button id="addMemberButton">+</button>
     </header>
-    <hr class="divider">
 
     <hr class="divider">
     <div class="card-container">
         <div class="list">
-            <!-- 리스트 1 -->
             <button id="openModalButton">카드 생성</button>
             <div class="sub-cards">
                 <div class="sub-card" draggable="true">하위 카드 1</div>
@@ -53,6 +52,32 @@
         </div>
         <button id="createCardButton">생성</button>
     </div>
-    <div class="card-container">
-        <script src="./src/list.js"></script>
+
+    <div class="modal" id="subcardModal">
+        <h2>하위 카드 상세 내용</h2>
+        <div id="subcardContent"></div>
+        <button id="closeSubcardButton">닫기</button>
+    </div>
+    <script src="./src/list.js"></script>
+    <!-- <script>
+        const cardContainer = document.querySelector('.card-container');
+
+        window.addEventListener('load', async () => {
+            try {
+                // 실제 백엔드 API 엔드포인트를 사용할 때에는 해당 엔드포인트에 맞게 수정
+                const response = await axios.get('https://api.example.com/cards');
+
+                // 가져온 데이터를 기반으로 카드 생성
+                response.data.forEach((cardData) => {
+                    const card = document.createElement('div');
+                    card.classList.add('board');
+                    card.textContent = `카드 내용: ${cardData.content}`;
+
+                    cardContainer.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching card data:', error);
+            }
+        });
+    </script> -->
 </body>

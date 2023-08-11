@@ -27,8 +27,9 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Get('/')
-  async getBoards() {
-    return await this.boardService.getBoards();
+  async getBoards(@Req() request: RequestWithLocals) {
+    const user_id = request.locals.user.id;
+    return await this.boardService.getBoards(user_id);
   }
 
   @Post('/')
@@ -70,7 +71,6 @@ export class BoardController {
     const user_id = request.locals.user.id;
     return this.boardService.createMember(board_id, user_id);
   }
-
 
   @Delete('/waiting/:board_id')
   async deleteWaiting(
