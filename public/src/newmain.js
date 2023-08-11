@@ -12,6 +12,32 @@ document.addEventListener('DOMContentLoaded', function () {
       logoutButton.classList.remove('d-none'); // 로그아웃 버튼 표시
       waitingButton.classList.remove('d-none'); // 멤버버튼 표시
       createBoardButton.classList.remove('d-none'); // 보드 생성 버튼 표시
+
+      var cardContainer = document.querySelector('.card-container');
+      // 기존 카드 컨테이너 데이터 지우기
+      cardContainer.innerHTML = '';
+      // 서버에서 JSON 데이터 가져오기 (예시)
+      axios
+        .get('http://localhost:3000/board')
+        .then(function (response) {
+          var jsonData = response.data;
+          // JSON 데이터를 기반으로 보드 카드 동적 생성
+          jsonData.forEach(function (boardData) {
+            var cardLink = document.createElement('a');
+            cardLink.href = 'list.html?boardId=' + boardData.id;
+            cardLink.className = 'card-link';
+
+            var cardDiv = document.createElement('div');
+            cardDiv.className = 'board';
+            cardDiv.textContent = boardData.name;
+
+            cardLink.appendChild(cardDiv);
+            cardContainer.appendChild(cardLink);
+          });
+        })
+        .catch(function (error) {
+          console.error('Error fetching board data:', error);
+        });
     }
   }
 
