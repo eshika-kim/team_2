@@ -15,6 +15,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommentModule } from './comment/comment.module';
 import { CardModule } from './card/card.module';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfigService } from './config/jwt.config.service';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -24,19 +28,37 @@ import { AuthMiddleware } from './auth/auth.middleware';
       useClass: TypeOrmConfigService,
       inject: [ConfigService],
     }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useClass: JwtConfigService,
+      inject: [ConfigService],
+    }),
+    CacheModule.register({
+      ttl: 60000,
+      max: 100,
+      isGlobal: true,
+    }),
     BoardModule,
     UserModule,
+    ListModule,
     CommentModule,
     CardModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService, AuthMiddleware],
+  providers: [AppService, AuthMiddleware],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes({
-      path: 'board/member/:board_id',
-      method: RequestMethod.POST,
-    });
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: 'user/update', method: RequestMethod.PUT },
+        { path: 'board', method: RequestMethod.POST },
+        { path: 'board/member/:board_id', method: RequestMethod.POST },
+        { path: 'board/waiting/:board_id', method: RequestMethod.POST },
+        { path: 'comment/:card_id', method: RequestMethod.POST },
+        { path: 'comment/:comment_id', method: RequestMethod.PUT },
+        { path: 'comment/:comment_id', method: RequestMethod.DELETE },
+      );
   }
 }

@@ -23,7 +23,7 @@ export class ListController {
 
   @Post('/:board_id')
   createList(@Param('board_id') board_id: number, @Body() data: CreateListDto) {
-    return this.cardService.createList(board_id, data.name);
+    return this.cardService.createList(board_id, data.name, data.order);
   }
 
   @Patch('/:list_id')
