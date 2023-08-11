@@ -8,12 +8,20 @@ import {
   Put,
   Patch,
   Query,
+  Req,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardDto } from 'src/dto/card/create-card.dto';
 import { UpdateCardDto } from 'src/dto/card/update-card.dto';
-import { DeleteCardDto } from 'src/dto/card/delete-card.dto';
-
+import { Request } from 'express';
+interface RequestWithLocals extends Request {
+  locals: {
+    user: {
+      id: number;
+      name: string;
+    };
+  };
+}
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
@@ -77,8 +85,8 @@ export class CardController {
   }
 
   // 카드 삭제
-  @Delete('/:id')
-  deleteCard(@Param('id') card_id: number, @Body() data: DeleteCardDto) {
+  @Delete('/:card_id')
+  deleteCard(@Param('id') card_id: number) {
     return this.cardService.deleteCard(card_id);
   }
 }

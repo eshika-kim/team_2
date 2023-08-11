@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { List } from './list.entity';
+import { User } from './user.entity';
 export enum StateEnum {
   TODO = 'todo',
   DOING = 'doing',
