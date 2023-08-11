@@ -14,41 +14,50 @@ var _a, _b, _c, _d, _e;
 // 로그인 폼 제출 처리
 (_c = document.getElementById('loginForm')) === null || _c === void 0
   ? void 0
-  : _c.addEventListener('submit', function (event) {
+  : _c.addEventListener('submit', async function (event) {
       event.preventDefault(); // 폼 제출 기본 동작 막기
-      // 실제로는 서버로 전송하거나 데이터베이스에서 확인해야 합니다.
-      var loginId = document.getElementById('loginId').value;
+      var emailId = document.getElementById('emailId').value;
       var loginPassword = document.getElementById('loginPassword').value;
-      // 예제 데이터와 비교
-      if (loginId === 'othwan410' && loginPassword === 'qwerty123') {
-        alert('로그인 성공!');
-        // 로그인 상태로 변경
-        setLoggedIn(true);
-      } else {
-        alert('로그인 실패. 아이디 또는 비밀번호를 확인하세요.');
-      }
+      const loginResult = await axios({
+        url: 'http://localhost:3000/user/login',
+        method: 'post',
+        data: {
+          email: emailId,
+          password: loginPassword,
+        },
+      })
+        .then((response) => console.log(response.data))
+        .catch((error) => {
+          console.error('에러 발견: ', error);
+          console.log('Error response: ', error.response);
+        });
     });
 // 회원가입 폼 제출 처리
 (_d = document.getElementById('registerForm')) === null || _d === void 0
   ? void 0
-  : _d.addEventListener('submit', function (event) {
+  : _d.addEventListener('submit', async function (event) {
       event.preventDefault(); // 폼 제출 기본 동작 막기
-      // 실제로는 서버에 회원 정보를 전송해야 합니다.
-      var registerId = document.getElementById('registerId').value;
+      var registerEmail = document.getElementById('registerEmail').value;
       var registerPassword = document.getElementById('registerPassword').value;
+      var registerPasswordConfirm = document.getElementById(
+        'registerPasswordConfirm',
+      ).value;
       var registerName = document.getElementById('registerName').value;
-      // 예제 데이터와 동일한 정보인지 확인
-      if (
-        registerId === 'zz' &&
-        registerPassword === 'qwerty123' &&
-        registerName !== '아아'
-      ) {
-        alert('회원가입 성공!');
-        // 로그인 상태로 변경
-        setLoggedIn(true);
-      } else {
-        alert('회원가입 실패. 입력 정보를 확인하세요.');
-      }
+      const signupResult = await axios({
+        url: 'http://localhost:3000/user/sign',
+        method: 'post',
+        data: {
+          email: registerEmail,
+          password: registerPassword,
+          name: registerName,
+          passwordConfirm: registerPasswordConfirm,
+        },
+      })
+        .then((response) => console.log(response.data))
+        .catch((error) => {
+          console.error('에러 발견: ', error);
+          console.log('Error response: ', error.response);
+        });
     });
 // 로그아웃 버튼 클릭 시 로그아웃 상태로 변경
 (_e = document.getElementById('logoutButton')) === null || _e === void 0
