@@ -28,7 +28,7 @@ export class Card {
   name: string;
 
   @Column('varchar', { length: 10 })
-  color: string;
+  card_color: string;
 
   @Column('varchar', { length: 100 })
   description: string;

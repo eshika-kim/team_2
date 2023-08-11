@@ -21,7 +21,7 @@ export class CardService {
   async getCard() {
     const result = await this.cardRepository.find({
       where: { deletedAt: null },
-      select: ['description'],
+      select: ['name'],
     });
     return result;
   }
@@ -29,11 +29,11 @@ export class CardService {
   // 카드 상세 조회 + 댓글
   async detailCard(card_id: number) {
     const comment = await this.getComment(card_id);
-    const card = await this.cardRepository.find({
+    const card = await this.cardRepository.findOne({
       where: { deletedAt: null },
-      select: ['description', 'createdAt', 'color', 'dueDate', 'state'],
+      select: ['description', 'createdAt', 'card_color', 'dueDate', 'state'],
     });
-    const result = [...card, ...comment];
+    const result = [card, ...comment];
     return result;
   }
 
@@ -41,14 +41,15 @@ export class CardService {
   createCard(
     list_id: number,
     name: string,
-    color: string,
+    card_color: string,
     description: string,
-    dueDate: Date,
+    dueDate: string,
     state: StateEnum,
   ) {
     this.cardRepository.query(
-      `INSERT INTO list (list_id, name, color, description, dueDate, state, \`order\`) 
-      VALUES (${list_id}, '${name}', '${color}', '${description}', '${dueDate.toISOString()}', '${state}', (SELECT (MAX(${'order'}) + 1, 1) AS max FROM card WHERE list_id = ${list_id}))`,
+      `INSERT INTO card (list_id, name, card_color, description, dueDate, state, \`order\`)
+      SELECT ${list_id}, '${name}', '${card_color}', '${description}', '${dueDate}', '${state}',
+             COALESCE(MAX(\`order\`) + 1, 1) FROM card WHERE list_id = 1;`,
     );
   }
 
@@ -56,15 +57,15 @@ export class CardService {
   async updateCard(
     user_id: number,
     name: string,
-    color: string,
+    card_color: string,
     description: string,
-    dueDate: Date,
+    dueDate: string,
     state: StateEnum,
   ) {
     await this.checkCard(user_id);
     this.cardRepository.update(user_id, {
       name,
-      color,
+      card_color,
       description,
       dueDate,
       state,

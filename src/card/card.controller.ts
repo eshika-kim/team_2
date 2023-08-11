@@ -36,7 +36,7 @@ export class CardController {
     return this.cardService.createCard(
       list_id,
       data.name,
-      data.color,
+      data.card_color,
       data.description,
       data.dueDate,
       data.status,
@@ -49,7 +49,7 @@ export class CardController {
     return this.cardService.updateCard(
       card_id,
       data.name,
-      data.color,
+      data.card_color,
       data.description,
       data.dueDate,
       data.status,
