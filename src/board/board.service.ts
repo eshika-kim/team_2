@@ -39,12 +39,14 @@ export class BoardService {
       ])
       .getMany();
   }
-  // async getBoard(user_id:number, board_id: number) {
-  //   const board = await this.boardRepository.findOne({
-  //     where: {board_id},
-  //     select: [],
-  //   })
-  // }
+  async getBoard(user_id: number, board_id: number) {
+    const board = await this.boardRepository.query(
+      `Select board.board_id, board.name as '보드이름', list.name as '리스트이름', card.name as '카드이름' from board 
+      inner join list on board.board_id = list.board_id
+      inner join card on list.list_id = card.list_id 
+      where board.board_id = ${board_id}`,
+    );
+  }
   async createBoard(
     user_id: number,
     name: string,

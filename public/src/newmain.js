@@ -25,9 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
           // JSON 데이터를 기반으로 보드 카드 동적 생성
           jsonData.forEach(function (boardData) {
             var cardLink = document.createElement('a');
-            cardLink.href = 'list.html?boardId=' + boardData.id;
+            cardLink.href = 'newlist.html?boardId=' + boardData.board_id;
             cardLink.className = 'card-link';
-
             var cardDiv = document.createElement('div');
             cardDiv.className = 'board';
             cardDiv.textContent = boardData.name;
