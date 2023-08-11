@@ -30,7 +30,13 @@ export class BoardService {
             .where(`member.user_id = ${user_id} AND deletedAt IS NULL`)
             .getQuery(),
       )
-      .select(['board_id', 'user_id', 'name', 'color', 'description'])
+      .select([
+        'board.board_id',
+        'board.user_id',
+        'board.name',
+        'board.color',
+        'board.description',
+      ])
       .getMany();
   }
 
@@ -40,12 +46,18 @@ export class BoardService {
     color: BoardColor,
     description: string,
   ) {
-    this.boardRepository.insert({
+    const boardCreate = await this.boardRepository.insert({
       user_id,
       name,
       color,
       description,
     });
+    if (boardCreate) {
+      await this.memberRepository.insert({
+        user_id,
+        board_id: boardCreate.identifiers[0].board_id,
+      });
+    }
   }
 
   async getWaitings() {
