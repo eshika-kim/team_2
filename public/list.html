@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Register Popup</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <h1>2게더</h1>
+        </div>
+    </header>
+    <hr class="divider">
+
+    <hr class="divider">
+    <div class="card-container">
+        <div class="list">
+            <!-- 리스트 1 -->
+            <button id="openModalButton">카드 생성</button>
+            <div class="sub-cards">
+                <div class="sub-card" draggable="true">하위 카드 1</div>
+                <div class="sub-card" draggable="true">하위 카드 2</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="cardModal">
+        <button class="close-button" id="closeModalButton">X</button>
+        <h2>Create Card</h2>
+        <div class="input-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="input-group">
+            <label for="description">Description:</label>
+            <textarea id="description" rows="4"></textarea>
+        </div>
+        <div class="input-group">
+            <label for="color">Color:</label>
+            <select id="color">
+                <option value="red">red</option>
+                <option value="blue">blue</option>
+                <option value="green">green</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="dateTime">Duedate:</label>
+            <input type="datetime-local" id="dateTime">
+        </div>
+        <button id="createCardButton">생성</button>
+    </div>
+    <div class="card-container">
+        <script src="./src/list.js"></script>
+</body>

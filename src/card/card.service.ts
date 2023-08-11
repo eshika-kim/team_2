@@ -49,7 +49,7 @@ export class CardService {
     this.cardRepository.query(
       `INSERT INTO card (list_id, name, card_color, description, dueDate, state, \`order\`)
       SELECT ${list_id}, '${name}', '${card_color}', '${description}', '${dueDate}', '${state}',
-             COALESCE(MAX(\`order\`) + 1, 1) FROM card WHERE list_id = 1;`,
+             COALESCE(MAX(\`order\`) + 1, 1) FROM card WHERE list_id = ${list_id};`,
     );
   }
 
@@ -74,7 +74,7 @@ export class CardService {
 
   async updateCardOrder(card_id: number, list_id: number, order: number) {
     await this.cardRepository.query(
-      `UPDATE list SET order =
+      `UPDATE card SET order =
             CASE WHEN order >= ${order} AND card_id != ${card_id} THEN ${order} + 1
                  WHEN card_id = ${card_id} THEN ${order}
                  ELSE order
