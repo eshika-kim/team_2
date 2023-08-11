@@ -32,6 +32,15 @@ export class BoardController {
     return await this.boardService.getBoards(user_id);
   }
 
+  // @Get('/:board_id')
+  // async getBoard(
+  //   @Param('board_id') board_id: number,
+  //   @Req() request: RequestWithLocals,
+  // ) {
+  //   const user_id = request.locals.user.id;
+  //   return await this.boardService.getBoard(user_id, board_id);
+  // }
+
   @Post('/')
   createBoard(@Body() data: CreateBoardDto, @Req() request: RequestWithLocals) {
     const user = request.locals.user;
@@ -51,7 +60,6 @@ export class BoardController {
   @Post('/waiting/:board_id')
   createWaiting(
     @Param('board_id') board_id: number,
-    @Res({ passthrough: true }) res: Response,
     @Req() request: RequestWithLocals,
   ) {
     const user_id = request.locals.user.id;
