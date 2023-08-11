@@ -1,5 +1,31 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const boardId = urlParams.get('boardId');
+
 document.addEventListener('DOMContentLoaded', function () {
-  //리스트 생성 api
+  var listContainer = document.querySelector('.list-container');
+  listContainer.innerHTML = '';
+  axios({
+    url: `http://localhost:3000/list/${boardId}`,
+    method: 'get',
+  })
+    .then(function (response) {
+      var listDatas = response.data;
+      listDatas.forEach(function (listData) {
+        var listElement = document.createElement('div');
+        listElement.classList.add('list');
+
+        var listName = document.createElement('p');
+        listName.classList.add('list-name');
+        listName.textContent = listData.name;
+        listElement.appendChild(listName);
+        listContainer.appendChild(listElement);
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      alert(error.request.response);
+    });
 });
 
 const createListButton = document.querySelector('#createListButton');
@@ -18,22 +44,21 @@ createListButton.addEventListener('click', function () {
 // 리스트 생성 버튼 클릭 이벤트
 submitListButton.addEventListener('click', function () {
   const newListData = {
-    name: listTitleInput.value,
-    content: listContentInput.value,
+    name: ListTitle.value,
   };
-
-  // 데이터를 백엔드로 보내는 코드 (Axios 사용)
-  axios
-    .post('/list/:board_id', newListData) // 실제 백엔드 URL로 수정해야 합니다
-    .then((response) => {
-      // 성공 메시지 표시
-      const successMessage = document.createElement('div');
-      successMessage.classList.add('alert', 'alert-success', 'mt-3');
-      successMessage.textContent = '리스트가 성공적으로 생성되었습니다.';
-
+  axios({
+    url: `http://localhost:3000/list/${boardId}`,
+    method: 'post',
+    data: {
+      name: newListData.name,
+    },
+  })
+    .then(async (res) => {
+      console.log(res.successMessage);
       location.reload();
     })
     .catch((error) => {
+      console.log(error);
       alert(error.request.response);
     });
 });
