@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
   const loginButton = document.querySelector('.login-button');
   const logoutButton = document.querySelector('.logout-button');
   const waitingButton = document.querySelector('.waiting-button');
+  const createBoardButton = document.querySelector('.create-board-button');
 
   // 쿠키값 확인하여 버튼 상태 설정
   function checkLoginStatus() {
     let cookies = document.cookie;
     if (cookies.includes('Authorization=Bearer%20')) {
-      window.location.href = `mypage.html`;
-    } else {
-      loginButton.classList.remove('d-none'); // 로그인 버튼 표시
-      logoutButton.classList.add('d-none'); // 로그아웃 버튼 숨김
-      waitingButton.classList.add('d-none'); // 멤버버튼 숨김
+      loginButton.classList.add('d-none'); // 로그인 버튼 숨김
+      logoutButton.classList.remove('d-none'); // 로그아웃 버튼 표시
+      waitingButton.classList.remove('d-none'); // 멤버버튼 표시
+      createBoardButton.classList.remove('d-none'); // 보드 생성 버튼 표시
     }
   }
 
@@ -109,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  const createBoardButton = document.querySelector('#createBoardButton');
   const createBoardModal = new bootstrap.Modal(
     document.getElementById('createBoardModal'),
   );
