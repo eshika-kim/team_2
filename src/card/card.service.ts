@@ -49,7 +49,11 @@ export class CardService {
     this.cardRepository.query(
       `INSERT INTO card (list_id, name, card_color, description, dueDate, state, \`order\`)
       SELECT ${list_id}, '${name}', '${card_color}', '${description}', '${dueDate}', '${state}',
+<<<<<<< Updated upstream
              COALESCE(MAX(\`order\`) + 1, 1) FROM card WHERE list_id = ${list_id};`,
+=======
+             COALESCE(MAX(\`order\`) + 1, 1) FROM card WHERE list_id = ${list_id}};`,
+>>>>>>> Stashed changes
     );
   }
 
