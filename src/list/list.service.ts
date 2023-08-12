@@ -1,22 +1,40 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import _ from 'lodash';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { List } from 'src/entity/list.entity';
+import { Member } from 'src/entity/member.entity';
 
 @Injectable()
 export class ListService {
   constructor(
     @InjectRepository(List) private listRepository: Repository<List>,
+    @InjectRepository(Member) private meberRepository: Repository<Member>,
   ) {}
 
-  // 리스트 목록 가져오기
-  async getList(board_id: number) {
-    return await this.listRepository.find({
-      where: { deletedAt: null, board_id },
-      select: ['name', 'list_id', 'order'],
-      order: { order: 'ASC' },
+  // 멤버에 있는지 확인
+  async getMemberInfo(user_id: number, board_id: number) {
+    return await this.meberRepository.findOne({
+      where: { user_id, board_id },
+      select: ['user_id'],
     });
+  }
+  // 리스트 목록 가져오기
+  async getList(board_id: number, user_id: number) {
+    try {
+      const existMember = await this.getMemberInfo(user_id, board_id);
+      if (_.isNil(existMember)) {
+        throw new ConflictException(`이 보드를 조회 할 권한이 없습니다.`);
+      }
+
+      return await this.listRepository.find({
+        where: { deletedAt: null, board_id },
+        select: ['name', 'list_id', 'order'],
+        order: { order: 'ASC' },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   // 리스트 생성

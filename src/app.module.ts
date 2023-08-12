@@ -56,6 +56,7 @@ export class AppModule implements NestModule {
         { path: 'board', method: RequestMethod.POST },
         { path: 'board', method: RequestMethod.GET },
         { path: 'board/:board_id', method: RequestMethod.GET },
+        { path: 'list/:board_id', method: RequestMethod.GET },
         { path: 'board/waiting', method: RequestMethod.GET },
         { path: 'board/waiting/:board_id', method: RequestMethod.DELETE },
         { path: 'board/member/:board_id', method: RequestMethod.POST },
