@@ -67,14 +67,15 @@ export class BoardService {
     }
   }
 
-  async getWaitings() {
-    const waiting = this.waitingRepository.createQueryBuilder('waiting');
-
-    return await waiting
-      .innerJoin('board', 'waiting.board_id = board.board_id')
-      .select(['board.name'])
-      .getMany();
+  async getWaitings(user_id: number) {
+    return await this.waitingRepository.query(
+      `SELECT waiting.board_id, board.name as name
+           FROM waiting
+          INNER JOIN board on board.board_id = waiting.board_id
+          WHERE waiting.user_id = ${user_id}`,
+    );
   }
+  
 
   async createWaiting(board_id: number, user_id: number) {
     await this.waitingRepository.insert({
