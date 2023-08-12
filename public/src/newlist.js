@@ -3,8 +3,7 @@ const urlParams = new URLSearchParams(queryString);
 const boardId = urlParams.get('boardId');
 
 document.addEventListener('DOMContentLoaded', function () {
-  var listContainer = document.querySelector('.list-container');
-  listContainer.innerHTML = '';
+  const listContainer = document.querySelector('.list-container');
   axios({
     url: `http://localhost:3000/list/${boardId}`,
     method: 'get',
@@ -12,17 +11,24 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(function (response) {
       var listDatas = response.data;
       const listContainer = document.querySelector('.list-container');
-      const divElement = document.createElement('div');
-      divElement.className = 'list';
 
       listDatas.forEach(function (listData) {
+        const divElement = document.createElement('div');
+        divElement.className = 'list';
         axios({
           url: `http://localhost:3000/card/${listData.list_id}`,
           method: 'get',
         }).then(function (response) {
+          const pElement = document.createElement('p');
+          pElement.textContent = listData.name;
+          divElement.appendChild(pElement);
           const buttonElement = document.createElement('button');
           buttonElement.id = 'openModalButton'; // 버튼의 id 설정
-          buttonElement.textContent = listData.name;
+          buttonElement.textContent = '+';
+          buttonElement.addEventListener('click', () => {
+            modalList_id = listData.list_id;
+            createCardModal.show();
+          });
           divElement.appendChild(buttonElement);
 
           const cardsElement = document.createElement('div');
@@ -38,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             cardsElement.appendChild(subCardElement);
           });
-
           divElement.appendChild(cardsElement);
         });
         listContainer.appendChild(divElement);
@@ -85,22 +90,16 @@ submitListButton.addEventListener('click', function () {
     });
 });
 
-const openModalButton = document.getElementById('openModalButton');
 const createCardModal = new bootstrap.Modal(
   document.getElementById('createCardModal'),
 );
-
 const submitCardButton = document.querySelector('#submitCard');
 const nameInput = document.querySelector('#name');
 const descriptionInput = document.querySelector('#description');
 const color = document.querySelector('#color');
-const todoStatus = document.querySelector('#status');
+const todoStatus = document.querySelector('#todoStatus');
 const dateTimeInput = document.querySelector('#dateTime');
-
-// 모달 창 열기
-openModalButton.addEventListener('click', () => {
-  createCardModal.show();
-});
+let modalList_id = null;
 
 submitCardButton.addEventListener('click', function () {
   const newCardData = {
@@ -108,14 +107,14 @@ submitCardButton.addEventListener('click', function () {
     description: descriptionInput.value,
     card_color: color.value,
     status: todoStatus.value,
-    dueDate: dateTimeInput,
+    dueDate: dateTimeInput.value,
   };
 
   // 데이터를 백엔드로 보내는 코드 (Axios 사용)
   axios
-    .post(`/card/${list_id}`, newCardData) // 실제 백엔드 URL로 수정해야 합니다
+    .post(`/card/${modalList_id}`, newCardData) // 실제 백엔드 URL로 수정해야 합니다
     .then(() => {
-      alert('보드가 성공적으로 생성되었습니다.');
+      alert('카드가 성공적으로 생성되었습니다.');
       location.reload();
     })
     .catch((error) => {

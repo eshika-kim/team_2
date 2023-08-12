@@ -24,14 +24,6 @@
     <hr class="divider" />
 
     <div class="list-container">
-        <div class="list">
-            <p class="list-name">리스트 이름</p>
-            <button id="openModalButton">카드 생성</button>
-            <div class="sub-cards">
-                <div class="sub-card" draggable="true">하위 카드 1</div>
-                <div class="sub-card" draggable="true">하위 카드 2</div>
-            </div>
-        </div>
     </div>
 
     <!-- 리스트 생성을 위한 모달 -->
@@ -44,12 +36,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="createListForm">
-                        <div class="mb-3">
-                            <label for="ListTitle" class="form-label">제목</label>
-                            <input type="text" class="form-control" id="ListTitle" placeholder="제목을 입력하세요" required />
-                        </div>
-                    </form>
+                    <div class="mb-3">
+                        <label for="ListTitle" class="form-label">제목</label>
+                        <input type="text" class="form-control" id="ListTitle" placeholder="제목을 입력하세요" required />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="submitList">

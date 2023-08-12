@@ -22,6 +22,7 @@ export class CardService {
     const result = await this.cardRepository.find({
       where: { deletedAt: null, list_id },
       select: ['name', 'card_color'],
+      order: { order: 'ASC' },
     });
     return result;
   }
