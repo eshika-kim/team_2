@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinColumn,
+  RelationId,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Member } from './member.entity';
@@ -34,6 +35,7 @@ export class Board {
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
+  @RelationId((board: Board) => board.user_id)
   user_id: number;
 
   @OneToMany(() => List, (list) => list.board_id)

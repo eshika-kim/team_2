@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -8,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Board, BoardColor } from '../entity/board.entity';
 import { Member } from '../entity/member.entity';
 import { Waiting } from '../entity/waiting.entity';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class BoardService {
@@ -15,6 +17,7 @@ export class BoardService {
     @InjectRepository(Board) private boardRepository: Repository<Board>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(Waiting) private waitingRepository: Repository<Waiting>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   async getBoards(user_id: number) {
@@ -76,11 +79,44 @@ export class BoardService {
       .getMany();
   }
 
-  async createWaiting(board_id: number, user_id: number) {
-    await this.waitingRepository.insert({
-      board_id,
-      user_id,
-    });
+  async createWaiting(board_id: number, userId: number, inviteEmail: string) {
+    try {
+      // userId는 로그인한 유저임
+      const boardOwner = await this.boardRepository.query(
+        `SELECT * FROM board WHERE board_id=${board_id}`,
+      );
+      if (userId !== boardOwner[0].user_id) {
+        throw new UnauthorizedException('보드 생성자만이 초대할 수 있습니다.');
+      }
+      // 초대할 유저 정보
+      const inviteUser = await this.userRepository.findOne({
+        where: { email: inviteEmail },
+        select: ['user_id'],
+      });
+      if (userId === inviteUser.user_id) {
+        throw new BadRequestException('본인을 초대할 수 없습니다.');
+      }
+      const checkWaitUser = await this.waitingRepository.findOne({
+        where: { user_id: inviteUser.user_id },
+      });
+      if (checkWaitUser) {
+        throw new BadRequestException('초대중인 유저입니다.');
+      }
+      const checkMemberUser = await this.memberRepository.findOne({
+        where: { user_id: inviteUser.user_id },
+      });
+      if (checkMemberUser) {
+        throw new BadRequestException('초대가 완료된 유저입니다.');
+      }
+      if (inviteUser) {
+        this.waitingRepository.insert({
+          user_id: inviteUser.user_id,
+          board_id: board_id,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createMember(board_id: number, user_id: number) {

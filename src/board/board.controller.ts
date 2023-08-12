@@ -12,6 +12,7 @@ import {
 import { BoardService } from './board.service';
 import { CreateBoardDto } from '../dto/board/create-board.dto';
 import { UpdateBoardDto } from '../dto/board/update-board.dto';
+import { CreateWaitingDto } from 'src/dto/board/create-waitgin.dto';
 import { Request, Response } from 'express';
 interface RequestWithLocals extends Request {
   locals: {
@@ -61,9 +62,11 @@ export class BoardController {
   createWaiting(
     @Param('board_id') board_id: number,
     @Req() request: RequestWithLocals,
+    @Body() data: CreateWaitingDto,
   ) {
-    const user_id = request.locals.user.id;
-    return this.boardService.createWaiting(board_id, user_id);
+    const userId = request.locals.user.id;
+    const inviteEmail = data.email;
+    return this.boardService.createWaiting(board_id, userId, inviteEmail);
   }
 
   @Post('/member/:board_id')
