@@ -29,8 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
             cardLink.className = 'card-link';
             var cardDiv = document.createElement('div');
             cardDiv.className = 'board';
-            cardDiv.textContent = boardData.name;
+            var cardH2 = document.createElement('h5');
+            cardH2.textContent = boardData.name;
+            cardDiv.style.backgroundColor = boardData.color;
+            var cardP = document.createElement('p');
+            cardP.textContent = '설명: ' + boardData.description;
 
+            cardDiv.appendChild(cardH2);
+            cardDiv.appendChild(cardP);
             cardLink.appendChild(cardDiv);
             cardContainer.appendChild(cardLink);
           });
@@ -190,16 +196,8 @@ document.addEventListener('DOMContentLoaded', function () {
           },
         })
         .then((response) => {
-          // 성공 메시지 표시
-          const successMessage = document.createElement('div');
-          successMessage.classList.add('alert', 'alert-success', 'mt-3');
-          successMessage.textContent = '보드가 성공적으로 생성되었습니다.';
-
-          const modalFooter = document.querySelector(
-            '#createBoardModal .modal-footer',
-          );
-          modalFooter.insertAdjacentElement('beforebegin', successMessage);
-          // 보드 생성에 성공한 경우, 생성된 보드를 화면에 추가
+          alert('보드 생성이 완료되었습니다.');
+          location.reload();
         })
         .catch((error) => {
           alert(error.request.response.data);
