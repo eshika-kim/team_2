@@ -133,7 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const submitBoardButton = document.querySelector('#submitBoard');
   const boardTitleInput = document.querySelector('#boardTitle');
-  const boardContentInput = document.querySelector('#boardContent');
+  const boardDescriptionInput = document.querySelector('#boardContent');
+  const boardColorInput = document.querySelector('#color');
 
   // 모달 창 열기
   createBoardButton.addEventListener('click', function () {
@@ -143,8 +144,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // 보드 생성 버튼 클릭 이벤트
   submitBoardButton.addEventListener('click', function () {
     const newBoardData = {
-      title: boardTitleInput.value,
-      content: boardContentInput.value,
+      name: boardTitleInput.value,
+      description: boardDescriptionInput.value,
+      color: boardColorInput.value,
     };
 
     // 데이터를 백엔드로 보내는 코드 (Axios 사용)
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 보드 생성에 성공한 경우, 생성된 보드를 화면에 추가
       })
       .catch((error) => {
-        alert(error.request.response);
+        alert(error.request.response.data);
       });
   });
 });
