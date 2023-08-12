@@ -71,7 +71,6 @@ export class BoardService {
   }
 
   async getWaitings(user_id: number) {
-
     return await this.waitingRepository.query(
       `SELECT waiting.board_id, board.name as name
            FROM waiting
@@ -79,7 +78,6 @@ export class BoardService {
           WHERE waiting.user_id = ${user_id}`,
     );
   }
-  
 
   async createWaiting(board_id: number, userId: number, inviteEmail: string) {
     try {
@@ -99,14 +97,15 @@ export class BoardService {
         throw new BadRequestException('본인을 초대할 수 없습니다.');
       }
       const checkWaitUser = await this.waitingRepository.findOne({
-        where: { user_id: inviteUser.user_id },
+        where: { user_id: inviteUser.user_id, board_id },
       });
       if (checkWaitUser) {
         throw new BadRequestException('초대중인 유저입니다.');
       }
       const checkMemberUser = await this.memberRepository.findOne({
-        where: { user_id: inviteUser.user_id },
+        where: { user_id: inviteUser.user_id, board_id },
       });
+      console.log(checkMemberUser);
       if (checkMemberUser) {
         throw new BadRequestException('초대가 완료된 유저입니다.');
       }
