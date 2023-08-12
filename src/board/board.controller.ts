@@ -53,8 +53,9 @@ export class BoardController {
   }
 
   @Get('/waiting')
-  async getWaitings() {
-    return await this.boardService.getWaitings();
+  async getWaitings(@Req() request: RequestWithLocals) {
+    const user_id = request.locals.user.id;
+    return await this.boardService.getWaitings(user_id);
   }
 
   @Post('/waiting/:board_id')
