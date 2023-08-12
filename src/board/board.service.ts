@@ -68,22 +68,14 @@ export class BoardService {
   }
 
   async getWaitings(user_id: number) {
-    const query = `
-      SELECT waiting.board_id, board.name AS name
-      FROM waiting
-      INNER JOIN board ON board.board_id = waiting.board_id
-      WHERE waiting.user_id = ${user_id}
-    `;
-  
-    const waiting = await this.waitingRepository.query(query);
-  
-    if (waiting.length === 0) {
-      return { message: "멤버 추가 요청이 없습니다" };
-    }
-  
-    return waiting;
+
+    return await this.waitingRepository.query(
+      `SELECT waiting.board_id, board.name as name
+           FROM waiting
+          INNER JOIN board on board.board_id = waiting.board_id
+          WHERE waiting.user_id = ${user_id}`,
+    );
   }
-  
   
 
   async createWaiting(board_id: number, user_id: number) {

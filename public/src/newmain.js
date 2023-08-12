@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// 메인 페이지 멤버 요청 누를 시 모달창!
 document.addEventListener('DOMContentLoaded', function () {
   const dataModal = document.getElementById('dataModal');
   const waitingList = document.getElementById('waitingList');
@@ -180,67 +181,53 @@ document.addEventListener('DOMContentLoaded', function () {
     axios
       .get('/board/waiting')
       .then((response) => {
-        const responseData = response.data; // 가져온 멤버 데이터
+        const members = response.data; // 가져온 멤버 데이터
 
         waitingList.innerHTML = ''; // 기존 리스트 초기화
 
-        if (Array.isArray(responseData)) {
-          if (responseData.length === 0) {
-            const emptyItem = document.createElement('li');
-            emptyItem.textContent = '멤버 추가 요청이 없습니다';
-            waitingList.appendChild(emptyItem);
-          } else {
-            responseData.forEach((member) => {
-              const listItem = document.createElement('li');
-              listItem.textContent = member.name; // 사용자 이름으로 변경
+        members.forEach((member) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = member.name; // 사용자 이름으로 변경
 
-              const acceptButton = document.createElement('button');
-              acceptButton.textContent = '수락';
-              acceptButton.classList.add(
-                'btn',
-                'btn-success',
-                'btn-sm',
-                'accept-button',
-              );
-              acceptButton.addEventListener('click', function () {
-                // 해당 멤버를 수락하는 요청을 보내는 로직
-                axios
-                  .post(`/board/member/${member.board_id}`)
-                  .then((response) => {
-                    // 수락 성공 처리 로직
-                    console.log('멤버 수락 완료:', response.data);
-                  });
-              });
-
-              const cancelButton = document.createElement('button');
-              cancelButton.textContent = '취소';
-              cancelButton.classList.add(
-                'btn',
-                'btn-danger',
-                'btn-sm',
-                'cancel-button',
-              );
-              cancelButton.addEventListener('click', function () {
-                // 취소 처리 로직
-                axios
-                  .delete(`/board/waiting/${member.board_id}`)
-                  .then((response) => {
-                    // 취소 성공 처리 로직
-                    console.log('요청 취소 완료:', response.data);
-                  });
-              });
-
-              listItem.appendChild(acceptButton);
-              listItem.appendChild(cancelButton);
-
-              waitingList.appendChild(listItem);
+          const acceptButton = document.createElement('button');
+          acceptButton.textContent = '수락';
+          acceptButton.classList.add(
+            'btn',
+            'btn-success',
+            'btn-sm',
+            'accept-button',
+          );
+          acceptButton.addEventListener('click', function () {
+            // 해당 멤버를 수락하는 요청을 보내는 로직
+            axios.post(`/board/member/${member.board_id}`).then((response) => {
+              // 수락 성공 처리 로직
+              console.log('멤버 수락 완료:', response.data);
             });
-          }
-        } else {
-          const emptyItem = document.createElement('li');
-          emptyItem.textContent = '멤버 요청이 없습니다';
-          waitingList.appendChild(emptyItem);
-        }
+          });
+
+          const cancelButton = document.createElement('button');
+          cancelButton.textContent = '취소';
+          cancelButton.classList.add(
+            'btn',
+            'btn-danger',
+            'btn-sm',
+            'cancel-button',
+          );
+          cancelButton.addEventListener('click', function () {
+            // 취소 처리 로직
+            axios
+              .delete(`/board/waiting/${member.board_id}`)
+              .then((response) => {
+                // 취소 성공 처리 로직
+                console.log('요청 취소 완료:', response.data);
+              });
+          });
+
+          listItem.appendChild(acceptButton);
+          listItem.appendChild(cancelButton);
+
+          waitingList.appendChild(listItem);
+        });
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
