@@ -7,18 +7,31 @@ import {
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto } from '../dto/list/create-list.dto';
 import { UpdateListDto } from '../dto/list/update-list.dto';
+interface RequestWithLocals extends Request {
+  locals: {
+    user: {
+      id: number;
+      name: string;
+    };
+  };
+}
 
 @Controller('list')
 export class ListController {
   constructor(private readonly cardService: ListService) {}
 
   @Get('/:board_id')
-  async getList(@Param('board_id') board_id: number) {
-    return await this.cardService.getList(board_id);
+  async getList(
+    @Param('board_id') board_id: number,
+    @Req() request: RequestWithLocals,
+  ) {
+    const user_id = request.locals.user.id;
+    return await this.cardService.getList(board_id, user_id);
   }
 
   @Post('/:board_id')
