@@ -55,6 +55,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// 초대하기 버튼
+const inviteButton = document.querySelector('#inviteMember');
+const inviteModal = new bootstrap.Modal(document.getElementById('inviteModal'));
+const submitinviteButton = document.querySelector('#submitInvite');
+
+// 초대하기 제출 이벤트
+const submitInviteButton = document.querySelector('#submitInvite');
+const emailInput = document.querySelector('#email');
+const inviteError = document.querySelector('#inviteError');
+
+inviteButton.addEventListener('click', function () {
+  inviteError.style.display = 'none'; // 에러 메시지 초기화
+  inviteModal.show();
+});
+
+submitInviteButton.addEventListener('click', async function () {
+  const newInviteData = {
+    email: emailInput.value,
+  };
+
+  try {
+    const serverResponse = await axios({
+      url: `http://localhost:3000/board/waiting/${boardId}`,
+      method: 'post',
+      data: newInviteData,
+    });
+
+    if (serverResponse.status === 201) {
+      alert('초대가 성공적으로 완료되었습니다.');
+      location.reload();
+    }
+  } catch (error) {
+    console.log(error);
+
+    if (error.response && error.response.data) {
+      inviteError.textContent =
+        '초대에 실패했습니다. ' + error.response.data.message;
+      inviteError.style.display = 'block'; // 에러 메시지 표시
+    }
+  }
+});
+// 리스트 생성 버튼
 const createListButton = document.querySelector('#createListButton');
 const createListModal = new bootstrap.Modal(
   document.getElementById('createListModal'),
