@@ -68,6 +68,7 @@ export class BoardService {
   }
 
   async getWaitings(user_id: number) {
+
     return await this.waitingRepository.query(
       `SELECT waiting.board_id, board.name as name
            FROM waiting

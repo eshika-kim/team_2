@@ -14,8 +14,8 @@ export class ListService {
   async getList(board_id: number) {
     return await this.listRepository.find({
       where: { deletedAt: null, board_id },
-      select: ['name'],
-      order: { order: 'DESC' },
+      select: ['name', 'list_id'],
+      order: { order: 'ASC' },
     });
   }
 

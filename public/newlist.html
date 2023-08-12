@@ -1,95 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>투게더 trello</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./style/main.css" />
-  </head>
+</head>
 
-  <body>
+<body>
     <header class="header">
-      <div class="logo">2게더</div>
+        <div class="logo">2게더</div>
     </header>
 
     <!-- 리스트 생성 버튼 -->
-    <div
-      class="create-list"
-      style="margin-top: 20px; display: flex; justify-content: flex-start"
-    >
-      <button
-        class="btn btn-primary"
-        id="createListButton"
-        style="margin-left: 20px; width: 120px; height: 80px"
-      >
-        리스트 생성
-      </button>
+    <div class="create-list" style="margin-top: 20px; display: flex; justify-content: flex-start">
+        <button class="btn btn-primary" id="createListButton" style="margin-left: 20px; width: 120px; height: 80px">
+            리스트 생성
+        </button>
     </div>
 
     <hr class="divider" />
 
     <div class="list-container">
-      <div class="list">
-        <p class="list-name">리스트 이름</p>
-        <button id="openModalButton">카드 생성</button>
-        <div class="sub-cards">
-          <div class="sub-card" draggable="true">하위 카드 1</div>
-          <div class="sub-card" draggable="true">하위 카드 2</div>
-        </div>
-      </div>
     </div>
 
     <!-- 리스트 생성을 위한 모달 -->
-    <div
-      class="modal fade"
-      id="createListModal"
-      tabindex="-1"
-      aria-labelledby="createListModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="createListModalLabel">리스트 생성</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="createListForm">
-              <div class="mb-3">
-                <label for="ListTitle" class="form-label">제목</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="ListTitle"
-                  placeholder="제목을 입력하세요"
-                  required
-                />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              취소
-            </button>
-            <button type="button" class="btn btn-primary" id="submitList">
-              생성
-            </button>
-          </div>
+    <div class="modal fade" id="createListModal" tabindex="-1" aria-labelledby="createListModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createListModalLabel">리스트 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ListTitle" class="form-label">제목</label>
+                        <input type="text" class="form-control" id="ListTitle" placeholder="제목을 입력하세요" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitList">
+                        생성
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
+
+    <!-- 카드 생성을 위한 모달 -->
+    <div class="modal fade" id="createCardModal" tabindex="-1" aria-labelledby="createCardModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCardModalLabel">카드 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createBoardForm">
+                        <div class="mb-3">
+                            <label for="boardTitle" class="form-label">카드 이름</label>
+                            <input type="text" class="form-control" id="name" placeholder="카드 이름을 입력하세요" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="boardContent" class="form-label">카드 설명</label>
+                            <input class="form-control" id="description" placeholder="카드 설명을 입력하세요" required></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color">Color:</label>
+                            <select id="color">
+                                <option value="red">red</option>
+                                <option value="blue">blue</option>
+                                <option value="blue">yello</option>
+                                <option value="green">green</option>
+                                <option value="gray">gray</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="todoStatus">Status:</label>
+                            <select id="todoStatus">
+                                <option value="todo">todo</option>
+                                <option value="doing">doing</option>
+                                <option value="done">done</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateTime">Duedate:</label>
+                            <input type="datetime-local" id="dateTime">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitCard">
+                        생성
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Axios 로드 -->
@@ -99,5 +109,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="./src/newlist.js" defet></script>
-  </body>
+</body>
+
 </html>
