@@ -74,13 +74,40 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.list-container {
+  display: flex; /* 추가: 리스트 컨테이너를 flex로 설정 */
+  flex-wrap: wrap; /* 추가: 리스트가 너비를 벗어나면 다음 줄로 내려가도록 설정 */
+  justify-content: flex-start; /* 추가: 왼쪽 정렬 */
+}
+
 .list {
   background-color: #f0f0f0;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
+  width: 200px;
   box-sizing: border-box;
   margin: 20px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.list-name {
+  margin: 0;
+}
+
+#openModalButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .sub-cards {
