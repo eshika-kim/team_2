@@ -9,8 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entity/user.entity';
 import _ from 'lodash';
-import { CACHE_MANAGER } from '@nestjs/cache-manager/dist';
-import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
@@ -26,35 +24,44 @@ export class UserService {
     });
   }
   async createUser(email: string, name: string, password: string) {
-    const existUser = await this.getUserInfo(email);
-    if (!_.isNil(existUser)) {
-      throw new ConflictException(
-        `This email already has been using. email: ${email}`,
-      );
+    try {
+      const existUser = await this.getUserInfo(email);
+      if (!_.isNil(existUser)) {
+        throw new ConflictException(
+          `This email already has been using. email: ${email}`,
+        );
+      }
+      const insertUser = await this.userRepository.insert({
+        email,
+        name,
+        password,
+      });
+      const payload = {
+        id: insertUser.identifiers[0].id,
+        name: insertUser.identifiers[0].name,
+      };
+      const accessToken = await this.jwtService.signAsync(payload);
+      return accessToken;
+    } catch (error) {
+      throw error;
     }
-    const insertUser = await this.userRepository.insert({
-      email,
-      name,
-      password,
-    });
-    const payload = {
-      id: insertUser.identifiers[0].id,
-      name: insertUser.identifiers[0].name,
-    };
-    const accessToken = await this.jwtService.signAsync(payload);
-    return accessToken;
   }
+
   async login(email: string, password: string) {
-    const userConfirm = await this.getUserInfo(email);
-    if (_.isNil(userConfirm)) {
-      throw new NotFoundException(`User not found. user email: ${email}`);
+    try {
+      const userConfirm = await this.getUserInfo(email);
+      if (_.isNil(userConfirm)) {
+        throw new NotFoundException(`User not found. user email: ${email}`);
+      }
+      if (userConfirm.password !== password) {
+        throw new UnauthorizedException('User password is not corresponded');
+      }
+      const payload = { id: userConfirm.user_id, name: userConfirm.name };
+      const accessToken = await this.jwtService.signAsync(payload);
+      return accessToken;
+    } catch (error) {
+      throw error;
     }
-    if (userConfirm.password !== password) {
-      throw new UnauthorizedException('User password is not corresponded');
-    }
-    const payload = { id: userConfirm.user_id, name: userConfirm.name };
-    const accessToken = await this.jwtService.signAsync(payload);
-    return accessToken;
   }
 
   async updateUser(user_id: number, password: string, newPassword: string) {

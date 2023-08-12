@@ -45,6 +45,7 @@ export class BoardController {
   @Post('/')
   createBoard(@Body() data: CreateBoardDto, @Req() request: RequestWithLocals) {
     const user = request.locals.user;
+    console.log('컨트롤러', user);
     return this.boardService.createBoard(
       user.id,
       data.name,
