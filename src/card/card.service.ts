@@ -21,7 +21,7 @@ export class CardService {
   async getCard(list_id: number) {
     const result = await this.cardRepository.find({
       where: { deletedAt: null, list_id },
-      select: ['name', 'card_color'],
+      select: ['card_id', 'name', 'card_color', 'order'],
       order: { order: 'ASC' },
     });
     return result;
@@ -75,10 +75,10 @@ export class CardService {
 
   async updateCardOrder(card_id: number, list_id: number, order: number) {
     await this.cardRepository.query(
-      `UPDATE card SET order =
-            CASE WHEN order >= ${order} AND card_id != ${card_id} THEN ${order} + 1
+      `UPDATE card SET \`order\` =
+            CASE WHEN \`order\` >= ${order} AND card_id != ${card_id} THEN \`order\` + 1
                  WHEN card_id = ${card_id} THEN ${order}
-                 ELSE order
+                 ELSE \`order\`
             END
         WHERE list_id = ${list_id};`,
     );

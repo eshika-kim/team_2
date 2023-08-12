@@ -10,23 +10,23 @@ export class ListService {
     @InjectRepository(List) private listRepository: Repository<List>,
   ) {}
 
-  // 카드 목록 가져오기
+  // 리스트 목록 가져오기
   async getList(board_id: number) {
     return await this.listRepository.find({
       where: { deletedAt: null, board_id },
-      select: ['name', 'list_id'],
+      select: ['name', 'list_id', 'order'],
       order: { order: 'ASC' },
     });
   }
 
-  // 카드 생성
+  // 리스트 생성
   createList(board_id: number, name: string) {
     this.listRepository.query(
       `INSERT INTO list (board_id, name, \`order\`) VALUES (${board_id}, '${name}', (SELECT COALESCE(max, 1) FROM (SELECT (MAX(\`order\`) + 1) AS max FROM list where board_id = ${board_id}) tmp))`,
     );
   }
 
-  // 카드 수정
+  // 리스트 수정
   async updateList(list_id: number, name: string) {
     await this.listRepository.update(list_id, {
       name,
@@ -36,7 +36,7 @@ export class ListService {
   async updateListOrder(board_id: number, list_id: number, order: number) {
     await this.listRepository.query(
       `UPDATE list SET \`order\` =
-            CASE WHEN \`order\` >= ${order} AND list_id != ${list_id} THEN ${order} + 1
+            CASE WHEN \`order\` >= ${order} AND list_id != ${list_id} THEN \`order\` + 1
                  WHEN list_id = ${list_id} THEN ${order}
                  ELSE \`order\`
             END

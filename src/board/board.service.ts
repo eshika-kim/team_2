@@ -39,14 +39,16 @@ export class BoardService {
       ])
       .getMany();
   }
-  async getBoard(user_id: number, board_id: number) {
-    const board = await this.boardRepository.query(
-      `Select board.board_id, board.name as '보드이름', list.name as '리스트이름', card.name as '카드이름' from board 
-      inner join list on board.board_id = list.board_id
-      inner join card on list.list_id = card.list_id 
-      where board.board_id = ${board_id}`,
-    );
-  }
+
+  // async getBoard(user_id: number, board_id: number) {
+  //   const board = await this.boardRepository.query(
+  //     `Select board.board_id, board.name as '보드이름', list.name as '리스트이름', card.name as '카드이름' from board
+  //     inner join list on board.board_id = list.board_id
+  //     inner join card on list.list_id = card.list_id
+  //     where board.board_id = ${board_id}`,
+  //   );
+  // }
+
   async createBoard(
     user_id: number,
     name: string,
@@ -68,13 +70,12 @@ export class BoardService {
   }
 
   async getWaitings(user_id: number) {
-    const waiting = this.waitingRepository.createQueryBuilder('waiting');
-
-    return await waiting
-      .where('user_id')
-      .innerJoin('board', 'waiting.board_id = board.board_id')
-      .select(['board.name'])
-      .getMany();
+    return await this.waitingRepository.query(
+      `SELECT waiting.board_id, board.name as name
+           FROM waiting
+          INNER JOIN board on board.board_id = waiting.board_id
+          WHERE waiting.user_id = ${user_id}`,
+    );
   }
 
   async createWaiting(board_id: number, user_id: number) {

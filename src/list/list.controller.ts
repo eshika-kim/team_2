@@ -36,7 +36,7 @@ export class ListController {
   updateListOrder(
     @Param('list_id') list_id: number,
     @Body() data: UpdateListDto,
-    @Query('boad_id') board_id: number,
+    @Query('board_id') board_id: number,
   ) {
     return this.cardService.updateListOrder(board_id, list_id, data.order);
   }

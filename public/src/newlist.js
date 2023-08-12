@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
       listDatas.forEach(function (listData) {
         const divElement = document.createElement('div');
         divElement.className = 'list';
+        divElement.id = listData.list_id;
+        divElement.draggable = true;
         axios({
           url: `http://localhost:3000/card/${listData.list_id}`,
           method: 'get',
@@ -33,11 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
           const cardsElement = document.createElement('div');
           cardsElement.className = 'sub-cards';
+          cardsElement.id = listData.order;
 
           const cards = response.data;
           cards.forEach(function (cardData) {
             const subCardElement = document.createElement('div');
             subCardElement.className = 'sub-card'; // 클래스명 설정
+            subCardElement.id = cardData.card_id + '?' + cardData.order;
             subCardElement.draggable = true;
             subCardElement.textContent = cardData.name;
             subCardElement.style.backgroundColor = cardData.card_color;
@@ -53,6 +57,130 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log(error);
       alert(error.request.response);
     });
+
+  const listContainers = document.querySelectorAll('.list-container');
+
+  // 드래그 시작
+  listContainers.forEach(function (listContainer) {
+    listContainer.addEventListener('dragstart', function (event) {
+      event.dataTransfer.setData('text/plain', event.target.id);
+    });
+  });
+
+  // 드롭 이벤트
+  listContainers.forEach(function (listContainer) {
+    listContainer.addEventListener('dragover', function (event) {
+      event.preventDefault();
+    });
+
+    listContainer.addEventListener('drop', function (event) {
+      event.preventDefault();
+      const data = event.dataTransfer.getData('text/plain');
+      const draggedElement = document.getElementById(data);
+
+      // 드래그한 요소가 "sub-card" 클래스인지 확인
+      if (draggedElement.className === 'sub-card') {
+        if (
+          event.target.className === 'sub-card' ||
+          event.target.classList.contains('list')
+        ) {
+          const targetCard = event.target.id.split('?');
+          const draggCard = draggedElement.id.split('?');
+
+          let cardOrder = parseInt(targetCard[1]);
+          let draggCardorder = parseInt(draggCard[1]);
+          let cardId = parseInt(draggCard[0]);
+
+          if (event.target.classList.contains('list')) cardOrder = 1;
+          else if (draggCardorder < cardOrder) cardOrder++;
+
+          // 드롭된 sub-card의 리스트 id와 드래그한 sub-card의 리스트 id 비교
+          if (
+            parseInt(draggedElement.parentNode.parentNode.id) !==
+            parseInt(event.target.parentNode.parentNode.id)
+          ) {
+            let list_id = null;
+            if (event.target.classList.contains('list'))
+              list_id = event.target.id;
+            else list_id = parseInt(event.target.parentNode.parentNode.id);
+            axios({
+              //여기
+              url: `http://localhost:3000/card/cardWhere/${cardId}?list_id=${list_id}`,
+              method: 'patch',
+              data: {
+                order: cardOrder,
+              },
+            })
+              .then(async (res) => {
+                location.reload();
+              })
+              .catch((error) => {
+                alert(error.request.response);
+                return;
+              });
+          } else {
+            if (draggCardorder === cardOrder) return;
+            const list_id = parseInt(draggedElement.parentNode.parentNode.id);
+            axios({
+              //여기
+              url: `http://localhost:3000/card/order/${cardId}?list_id=${list_id}`,
+              method: 'patch',
+              data: {
+                order: cardOrder,
+              },
+            })
+              .then(async (res) => {
+                location.reload();
+              })
+              .catch((error) => {
+                alert(error.request.response);
+                return;
+              });
+          }
+        }
+      } // 드래그한 요소가 "list" 클래스인지 확인
+      else if (draggedElement.classList.contains('list')) {
+        // 드롭한 "list" 요소의 ID 가져오기
+        let listOrder = '';
+        if (event.target.classList.contains('list')) {
+          listOrder = parseInt(event.target.querySelector('.sub-cards').id);
+        } else if (event.target.parentNode.classList.contains('list')) {
+          listOrder = parseInt(
+            event.target.parentNode.querySelector('.sub-cards').id,
+          );
+        } else if (
+          event.target.parentNode.parentNode.classList.contains('list')
+        )
+          listOrder = parseInt(
+            event.target.parentNode.parentNode.querySelector('.sub-cards').id,
+          );
+
+        if (parseInt(draggedElement.querySelector('.sub-cards').id) < listOrder)
+          listOrder++;
+        else if (
+          parseInt(draggedElement.querySelector('.sub-cards').id) === listOrder
+        )
+          return;
+
+        const draggedElementId = draggedElement.id;
+        if (listOrder !== '') {
+          axios({
+            url: `http://localhost:3000/list/listOrder/${draggedElementId}?board_id=${boardId}`,
+            method: 'patch',
+            data: {
+              order: listOrder,
+            },
+          })
+            .then(async (res) => {
+              location.reload();
+            })
+            .catch((error) => {
+              alert(error.request.response);
+            });
+        }
+      }
+    });
+  });
 });
 
 const createListButton = document.querySelector('#createListButton');
