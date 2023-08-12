@@ -7,6 +7,19 @@
   color: #ffffff;
 }
 
+/* 초대하기 버튼 스타일 */
+.invite-button {
+  margin-right: 20px;
+  background-color: #1e2a78; /* 어두운 파란색 */
+  border-color: #1e2a78; /* 어두운 파란색 테두리 */
+}
+
+/* 초대하기 버튼 호버 시 스타일 */
+.invite-button:hover {
+  background-color: #0c1543; /* 더 어두운 파란색 */
+  border-color: #0c1543; /* 더 어두운 파란색 테두리 */
+}
+
 .logo {
   font-size: 24px;
 }

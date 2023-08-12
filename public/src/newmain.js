@@ -69,6 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const password = document.querySelector('#password').value;
     const confirm = document.querySelector('#confirm').value;
     const name = document.querySelector('#name').value;
+    const signError = document.querySelector('#signError');
+    const signupModal = document.querySelector('#signupModal');
+
+    signupButton.addEventListener('click', function () {
+      signError.style.display = 'none'; // 에러 메시지 초기화
+      signupModal.show();
+    });
 
     axios({
       url: 'http://localhost:3000/user/sign',
@@ -88,7 +95,11 @@ document.addEventListener('DOMContentLoaded', function () {
         location.reload();
       })
       .catch((error) => {
-        alert(error.request.response);
+        if (error.response && error.response.data) {
+          signError.textContent =
+            '초대에 실패했습니다. ' + error.response.data.message;
+          signError.style.display = 'block'; // 에러 메시지 표시
+        }
       });
   });
 
@@ -98,9 +109,12 @@ document.addEventListener('DOMContentLoaded', function () {
   );
 
   modalLoginButton.addEventListener('click', function () {
-    // 폼 데이터 수집
     const email = document.querySelector('#email-login').value;
     const password = document.querySelector('#password-login').value;
+    const loginError = document.querySelector('#loginError');
+    const loginModal = new bootstrap.Modal(
+      document.getElementById('loginModal'),
+    );
 
     // 데이터 객체 생성
     const userData = {
@@ -123,8 +137,17 @@ document.addEventListener('DOMContentLoaded', function () {
         location.reload();
       })
       .catch((error) => {
-        console.error('에러 발견: ', error);
-        console.log('Error response: ', error.response);
+        console.log(error);
+
+        if (error.response && error.response.data) {
+          // 에러 메시지를 모달에 추가
+          loginError.textContent =
+            '로그인에 실패했습니다. ' + error.response.data.message;
+          loginError.style.display = 'block'; // 에러 메시지 표시
+
+          // 모달 표시
+          loginModal.show();
+        }
       });
   });
 
@@ -149,23 +172,116 @@ document.addEventListener('DOMContentLoaded', function () {
       color: boardColorInput.value,
     };
 
-    // 데이터를 백엔드로 보내는 코드 (Axios 사용)
-    axios
-      .post('/board', newBoardData) // 실제 백엔드 URL로 수정해야 합니다
-      .then((response) => {
-        // 성공 메시지 표시
-        const successMessage = document.createElement('div');
-        successMessage.classList.add('alert', 'alert-success', 'mt-3');
-        successMessage.textContent = '보드가 성공적으로 생성되었습니다.';
+    // JWT 토큰 가져오기
+    const cookies = document.cookie.split(';');
+    let jwtToken = null;
+    cookies.forEach((cookie) => {
+      const [key, value] = cookie.split('=');
+      if (key.trim() === 'Authentication') {
+        jwtToken = value; // 쿠키에서 JWT 토큰 가져옴
+      }
+    });
 
-        const modalFooter = document.querySelector(
-          '#createBoardModal .modal-footer',
-        );
-        modalFooter.insertAdjacentElement('beforebegin', successMessage);
-        // 보드 생성에 성공한 경우, 생성된 보드를 화면에 추가
+    if (jwtToken) {
+      axios
+        .post('/board', newBoardData, {
+          headers: {
+            Authentication: `${jwtToken}`,
+          },
+        })
+        .then((response) => {
+          // 성공 메시지 표시
+          const successMessage = document.createElement('div');
+          successMessage.classList.add('alert', 'alert-success', 'mt-3');
+          successMessage.textContent = '보드가 성공적으로 생성되었습니다.';
+
+          const modalFooter = document.querySelector(
+            '#createBoardModal .modal-footer',
+          );
+          modalFooter.insertAdjacentElement('beforebegin', successMessage);
+          // 보드 생성에 성공한 경우, 생성된 보드를 화면에 추가
+        })
+        .catch((error) => {
+          alert(error.request.response.data);
+        });
+    }
+  });
+});
+
+// 메인 페이지 멤버 요청 누를 시 모달창!
+document.addEventListener('DOMContentLoaded', function () {
+  const dataModal = document.getElementById('dataModal');
+  const waitingList = document.getElementById('waitingList');
+
+  // 모달이 열릴 때의 이벤트 리스너
+  dataModal.addEventListener('shown.bs.modal', function () {
+    // 서버로부터 데이터를 가져와서 리스트 아이템을 추가하는 로직을 구현
+    axios
+      .get('/board/waiting')
+      .then((response) => {
+        const members = response.data; // 가져온 멤버 데이터
+
+        waitingList.innerHTML = ''; // 기존 리스트 초기화
+
+        members.forEach((member) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = member.name; // 사용자 이름으로 변경
+
+          const acceptButton = document.createElement('button');
+          acceptButton.textContent = '수락';
+          acceptButton.classList.add(
+            'btn',
+            'btn-success',
+            'btn-sm',
+            'accept-button',
+          );
+          acceptButton.addEventListener('click', function () {
+            // 해당 멤버를 수락하는 요청을 보내는 로직
+            axios.post(`/board/member/${member.board_id}`).then((response) => {
+              // 수락 성공 처리 로직
+              alert('멤버 수락 완료:', response.data);
+              // 수락된 요청이므로 리스트 아이템 삭제
+              waitingList.removeChild(listItem);
+            });
+          });
+
+          const cancelButton = document.createElement('button');
+          cancelButton.textContent = '취소';
+          cancelButton.classList.add(
+            'btn',
+            'btn-danger',
+            'btn-sm',
+            'cancel-button',
+          );
+          cancelButton.addEventListener('click', function () {
+            // 취소 처리 로직
+            const confirmation = confirm('정말 삭제하시겠습니까?');
+            if (confirmation) {
+              axios
+                .delete(`/board/waiting/${member.board_id}`)
+                .then((response) => {
+                  // 취소 성공 처리 로직
+                  console.log('요청 취소 완료:', response.data);
+                  // 리스트 아이템 삭제
+                  waitingList.removeChild(listItem);
+                });
+            }
+          });
+
+          listItem.appendChild(acceptButton);
+          listItem.appendChild(cancelButton);
+
+          waitingList.appendChild(listItem);
+        });
       })
       .catch((error) => {
-        alert(error.request.response.data);
+        console.error('Error fetching data:', error);
       });
+  });
+
+  // 모달이 닫힐 때의 이벤트 리스너
+  dataModal.addEventListener('hidden.bs.modal', function () {
+    // 리스트 초기화
+    waitingList.innerHTML = '';
   });
 });
