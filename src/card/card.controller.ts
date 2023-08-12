@@ -27,9 +27,9 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   // 카드 목록 조회
-  @Get('/')
-  async getCard() {
-    return await this.cardService.getCard();
+  @Get('/:list_id')
+  async getCard(@Param('list_id') list_id: number) {
+    return await this.cardService.getCard(list_id);
   }
 
   // 카드 상세 조회(댓글 포함)

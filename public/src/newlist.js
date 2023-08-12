@@ -11,15 +11,37 @@ document.addEventListener('DOMContentLoaded', function () {
   })
     .then(function (response) {
       var listDatas = response.data;
-      listDatas.forEach(function (listData) {
-        var listElement = document.createElement('div');
-        listElement.classList.add('list');
+      const listContainer = document.querySelector('.list-container');
+      const divElement = document.createElement('div');
+      divElement.className = 'list';
 
-        var listName = document.createElement('p');
-        listName.classList.add('list-name');
-        listName.textContent = listData.name;
-        listElement.appendChild(listName);
-        listContainer.appendChild(listElement);
+      listDatas.forEach(function (listData) {
+        axios({
+          url: `http://localhost:3000/card/${listData.list_id}`,
+          method: 'get',
+        }).then(function (response) {
+          const buttonElement = document.createElement('button');
+          buttonElement.id = 'openModalButton'; // 버튼의 id 설정
+          buttonElement.textContent = listData.name;
+          divElement.appendChild(buttonElement);
+
+          const cardsElement = document.createElement('div');
+          cardsElement.className = 'sub-cards';
+
+          const cards = response.data;
+          cards.forEach(function (cardData) {
+            const subCardElement = document.createElement('div');
+            subCardElement.className = 'sub-card'; // 클래스명 설정
+            subCardElement.draggable = true;
+            subCardElement.textContent = cardData.name;
+            subCardElement.style.backgroundColor = cardData.card_color;
+
+            cardsElement.appendChild(subCardElement);
+          });
+
+          divElement.appendChild(cardsElement);
+        });
+        listContainer.appendChild(divElement);
       });
     })
     .catch((error) => {
@@ -67,7 +89,8 @@ const openModalButton = document.getElementById('openModalButton');
 const createCardModal = new bootstrap.Modal(
   document.getElementById('createCardModal'),
 );
-const submitBoardButton = document.getElementById('submitBoardButton');
+
+const submitCardButton = document.querySelector('#submitCard');
 const nameInput = document.querySelector('#name');
 const descriptionInput = document.querySelector('#description');
 const color = document.querySelector('#color');
@@ -79,7 +102,7 @@ openModalButton.addEventListener('click', () => {
   createCardModal.show();
 });
 
-submitBoardButton.addEventListener('click', function () {
+submitCardButton.addEventListener('click', function () {
   const newCardData = {
     name: nameInput.value,
     description: descriptionInput.value,

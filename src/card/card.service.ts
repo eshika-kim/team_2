@@ -18,10 +18,10 @@ export class CardService {
   ) {}
 
   // 카드 목록 가져오기
-  async getCard() {
+  async getCard(list_id: number) {
     const result = await this.cardRepository.find({
-      where: { deletedAt: null },
-      select: ['name'],
+      where: { deletedAt: null, list_id },
+      select: ['name', 'card_color'],
     });
     return result;
   }
