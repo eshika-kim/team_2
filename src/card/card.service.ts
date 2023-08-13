@@ -56,15 +56,14 @@ export class CardService {
 
   // 카드 수정
   async updateCard(
-    user_id: number,
+    card_id: number,
     name: string,
     card_color: string,
     description: string,
     dueDate: string,
     state: StateEnum,
   ) {
-    await this.checkCard(user_id);
-    this.cardRepository.update(user_id, {
+    await this.cardRepository.update(card_id, {
       name,
       card_color,
       description,
