@@ -402,6 +402,21 @@ function showCardModal(cardData) {
   cardModal.show();
 }
 
+const deleteCardButton = document.querySelector('#deleteCardButton');
+
+deleteCardButton.addEventListener('click', function () {
+  axios
+    .delete(`/card/${card_id}`) // 적절한 엔드포인트로 수정해야 합니다
+    .then(() => {
+      alert('카드가 성공적으로 삭제되었습니다.');
+
+      location.reload();
+    })
+    .catch((error) => {
+      console.log(error.request.response);
+    });
+});
+
 const editCardTitleInput = document.querySelector('#editCardName');
 const editCardDescriptionInput = document.querySelector('#editCardDescription');
 const editCardColor = document.querySelector('#editCardColor');
@@ -414,7 +429,7 @@ const editCardModal = new bootstrap.Modal(
   document.getElementById('editCardModal'),
 );
 
-editCardButton.addEventListener('click', function (event) {
+editCardButton.addEventListener('click', function () {
   editCardTitleInput.value = cardTitle.textContent;
   editCardDescriptionInput.value = cardDescription.textContent;
   editCardColor.value = 'red';
