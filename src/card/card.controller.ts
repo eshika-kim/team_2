@@ -13,15 +13,16 @@ import {
 import { CardService } from './card.service';
 import { CreateCardDto } from 'src/dto/card/create-card.dto';
 import { UpdateCardDto } from 'src/dto/card/update-card.dto';
-import { Request } from 'express';
-interface RequestWithLocals extends Request {
-  locals: {
-    user: {
-      id: number;
-      name: string;
-    };
-  };
-}
+// import { Request } from 'express';
+// interface RequestWithLocals extends Request {
+//   locals: {
+//     user: {
+//       id: number;
+//       name: string;
+//     };
+//   };
+// }
+
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
@@ -33,8 +34,8 @@ export class CardController {
   }
 
   // 카드 상세 조회(댓글 포함)
-  @Get('/:id')
-  async detailCard(@Param('id') card_id: number) {
+  @Get('detail/:card_id')
+  async detailCard(@Param('card_id') card_id: number) {
     return await this.cardService.detailCard(card_id);
   }
 

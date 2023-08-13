@@ -131,6 +131,7 @@
         </div>
     </div>
 
+    <!-- 카드 상세 정보 모달 -->
     <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -139,25 +140,37 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="cardTitle" class="form-label">카드 이름</label>
-                        <p id="cardTitle"></p>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardTitle" class="form-label me-3">카드 이름</h5>
+                        <p id="cardTitle" class="mb-0"></p>
                     </div>
-                    <div class="mb-3">
-                        <label for="cardDescription" class="form-label">카드 설명</label>
-                        <p id="cardDescription"></p>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardDescription" class="form-label me-3">카드 설명</h5>
+                        <p id="cardDescription" class="mb-0"></p>
                     </div>
-                    <div class="mb-3">
-                        <label for="cardColor" class="form-label">색상</label>
-                        <div id="cardColor" style="width: 50px; height: 30px;"></div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardStatus" class="form-label me-3">상태</h5>
+                        <p id="cardStatus" class="mb-0"></p>
                     </div>
-                    <div class="mb-3">
-                        <label for="cardStatus" class="form-label">상태</label>
-                        <p id="cardStatus"></p>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardDueDate" class="form-label me-3">마감일</h5>
+                        <p id="cardDueDate" class="mb-0"></p>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+
+                    <!-- 댓글 입력 폼 -->
+                    <div class="mb-3 d-flex">
+                        <form id="commentForm" class="w-100">
+                            <input type="text" class="form-control" id="commentInput" name="comment"
+                                placeholder="댓글을 입력하세요">
+                        </form>
+                        <button type="submit" class="btn btn-primary btn-sm ms-2" form="commentForm">+</button>
+                    </div>
+
+                    <!-- 댓글 영역 -->
+                    <div class="mb-3">
+                        <div id="comments" class="comment-section">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
