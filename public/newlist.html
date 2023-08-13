@@ -11,37 +11,38 @@
 
 <body>
     <header class="header">
-      <div class="logo">2게더</div>
-      <button class="btn btn-primary invite-button" data-bs-toggle="modal" data-bs-target="#inviteModal">초대하기</button>
+        <div class="logo">2게더</div>
+        <button class="btn btn-primary invite-button" data-bs-toggle="modal" data-bs-target="#inviteModal">초대하기</button>
     </header>
 
-    
-<!-- 초대하기 모달 -->
-<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="inviteModalLabel">초대하기</h5>
-        <button type="button" id="inviteMember" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- 초대하기 폼 -->
-        <form id="inviteForm">
-          <div class="mb-3">
-            <label for="email" class="form-label">이메일 주소</label>
-            <input type="email" class="form-control" id="email" placeholder="이메일 주소를 입력하세요" required>
-          </div>
-          <!-- 에러 메시지 표시 영역 -->
-          <div class="alert alert-danger" id="inviteError" style="display: none;"></div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" id="submitInvite">초대</button>
-      </div>
+
+    <!-- 초대하기 모달 -->
+    <div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inviteModalLabel">초대하기</h5>
+                    <button type="button" id="inviteMember" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 초대하기 폼 -->
+                    <form id="inviteForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">이메일 주소</label>
+                            <input type="email" class="form-control" id="email" placeholder="이메일 주소를 입력하세요" required>
+                        </div>
+                        <!-- 에러 메시지 표시 영역 -->
+                        <div class="alert alert-danger" id="inviteError" style="display: none;"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="submitInvite">초대</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
     <!-- 리스트 생성 버튼 -->
     <div class="create-list" style="margin-top: 20px; display: flex; justify-content: flex-start">
         <button class="btn btn-primary" id="createListButton" style="margin-left: 20px; width: 120px; height: 80px">
@@ -125,6 +126,51 @@
                     <button type="button" class="btn btn-primary" id="submitCard">
                         생성
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 카드 상세 정보 모달 -->
+    <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cardModalLabel">카드 상세 정보</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardTitle" class="form-label me-3">카드 이름</h5>
+                        <p id="cardTitle" class="mb-0"></p>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardDescription" class="form-label me-3">카드 설명</h5>
+                        <p id="cardDescription" class="mb-0"></p>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardStatus" class="form-label me-3">상태</h5>
+                        <p id="cardStatus" class="mb-0"></p>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <h5 for="cardDueDate" class="form-label me-3">마감일</h5>
+                        <p id="cardDueDate" class="mb-0"></p>
+                    </div>
+
+                    <!-- 댓글 입력 폼 -->
+                    <div class="mb-3 d-flex">
+                        <form id="commentForm" class="w-100">
+                            <input type="text" class="form-control" id="commentInput" name="comment"
+                                placeholder="댓글을 입력하세요">
+                        </form>
+                        <button type="submit" class="btn btn-primary btn-sm ms-2" form="commentForm">+</button>
+                    </div>
+
+                    <!-- 댓글 영역 -->
+                    <div class="mb-3">
+                        <div id="comments" class="comment-section">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

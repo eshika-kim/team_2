@@ -31,10 +31,10 @@ export class CardService {
   async detailCard(card_id: number) {
     const comment = await this.getComment(card_id);
     const card = await this.cardRepository.findOne({
-      where: { deletedAt: null },
-      select: ['description', 'createdAt', 'card_color', 'dueDate', 'state'],
+      where: { deletedAt: null, card_id },
+      select: ['name', 'description', 'createdAt', 'dueDate', 'state'],
     });
-    const result = [card, ...comment];
+    const result = [card, comment];
     return result;
   }
 
@@ -107,13 +107,14 @@ export class CardService {
   }
 
   // 작성한 유저가 맞는지 확인하는 로직
-  private async userCheck(user_id: number, cardUser_id: number) {}
+  // private async userCheck(user_id: number, cardUser_id: number) {}
 
   // 카드 내 코멘트 가져오는 로직
   private async getComment(card_id: number) {
     return await this.commentRepository.find({
-      where: [{ deletedAt: null }, { card_id: card_id }],
-      select: ['comment', 'name', 'createdAt', 'updatedAt'],
+      where: [{ deletedAt: null, card_id }],
+      select: ['comment', 'name', 'createdAt'],
+      order: { createdAt: 'DESC' },
     });
   }
 }

@@ -60,6 +60,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const listContainers = document.querySelectorAll('.list-container');
 
+  listContainers.forEach(function (listContainer) {
+    listContainer.addEventListener('click', function (event) {
+      const clickedElement = event.target;
+      if (clickedElement.classList.contains('sub-card')) {
+        const cardId = clickedElement.id.split('?')[0];
+        openCardModal(cardId);
+      }
+    });
+  });
   // 드래그 시작
   listContainers.forEach(function (listContainer) {
     listContainer.addEventListener('dragstart', function (event) {
@@ -291,3 +300,104 @@ submitCardButton.addEventListener('click', function () {
       console.log(error.request.response);
     });
 });
+
+const commentsContainer = document.querySelector('#comments');
+const cardModal = new bootstrap.Modal(document.getElementById('cardModal'));
+const cardTitle = document.querySelector('#cardTitle');
+const cardDescription = document.querySelector('#cardDescription');
+const cardStatus = document.querySelector('#cardStatus');
+const cardDueDate = document.querySelector('#cardDueDate');
+const commentForm = document.querySelector('#commentForm');
+const commentInput = document.querySelector('#commentInput');
+let card_id = '';
+
+function openCardModal(cardId) {
+  card_id = cardId;
+  commentsContainer.innerHTML = '';
+  commentInput.value = '';
+  axios({
+    url: `http://localhost:3000/card/detail/${cardId}`,
+    method: 'get',
+  })
+    .then(function (response) {
+      const cardData = response.data;
+      showCardModal(cardData);
+    })
+    .catch((error) => {
+      console.log(error);
+      alert(error.request.response);
+    });
+}
+
+commentForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  if (commentInput.value === '') return alert('댓글을 입력해주세요');
+  const data = {
+    comment: commentInput.value,
+    // 추가로 필요한 댓글 관련 데이터가 있다면 여기에 추가하세요.
+  };
+
+  axios({
+    url: `http://localhost:3000/comment/${card_id}`, // 적절한 엔드포인트로 수정
+    method: 'post',
+    data: data,
+  })
+    .then(function (response) {
+      // 댓글 추가에 성공한 경우 여기에 처리 코드를 추가
+      console.log(response.data);
+      // 예: 댓글 추가 후 댓글 목록을 갱신하거나 모달을 다시 로드
+      openCardModal(card_id); // 댓글 목록 갱신
+    })
+    .catch(function (error) {
+      console.error('댓글 추가 에러:', error);
+      // 댓글 추가 실패 시 처리할 코드를 여기에 추가
+    });
+});
+
+// 카드 모달 보여주기 함수
+function showCardModal(cardData) {
+  cardTitle.textContent = cardData[0].name;
+  cardDescription.textContent = cardData[0].description;
+  cardStatus.textContent = cardData[0].state;
+  cardDueDate.textContent = cardData[0].dueDate;
+
+  const commentsData = cardData[1];
+
+  // 댓글 정보를 반복하여 표시
+  commentsData.forEach(function (comment) {
+    // 댓글 카드 컴포넌트 생성
+    const commentCard = document.createElement('div');
+    commentCard.className = 'card mb-2'; // 카드 스타일 적용
+
+    // 카드 내용 구성
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+
+    // 작성자 정보 표시
+    const authorDiv = document.createElement('div');
+    authorDiv.className = 'card-title';
+    authorDiv.textContent = '작성자: ' + comment.name;
+    cardBody.appendChild(authorDiv);
+
+    // 댓글 내용 표시
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'card-text';
+    contentDiv.textContent = comment.comment;
+    cardBody.appendChild(contentDiv);
+
+    // 작성일 정보 표시
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'card-subtitle text-muted';
+    dateDiv.textContent = '작성일: ' + comment.createdAt;
+    cardBody.appendChild(dateDiv);
+
+    // 카드 바디를 댓글 카드에 추가
+    commentCard.appendChild(cardBody);
+
+    // 댓글 카드를 댓글 영역에 추가
+    commentsContainer.appendChild(commentCard);
+  });
+
+  cardModal.show();
+}
