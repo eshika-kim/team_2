@@ -87,7 +87,7 @@ export class CardController {
 
   // 카드 삭제
   @Delete('/:card_id')
-  deleteCard(@Param('id') card_id: number) {
+  deleteCard(@Param('card_id') card_id: number) {
     return this.cardService.deleteCard(card_id);
   }
 }

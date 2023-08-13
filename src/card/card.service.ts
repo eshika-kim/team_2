@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  Inject,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -90,23 +85,9 @@ export class CardService {
 
   // 카드 삭제
   async deleteCard(card_id: number) {
-    await this.checkCard(card_id);
-    this.cardRepository.softDelete(card_id);
+    await this.commentRepository.softDelete({ card_id });
+    await this.cardRepository.softDelete(card_id);
   }
-
-  // 카드 유무 존재 확인 로직
-  private async checkCard(card_id: number) {
-    const card = await this.cardRepository.findOne({
-      where: { card_id, deletedAt: null },
-    });
-    if (_.isNil(card)) {
-      throw new NotFoundException(`Card not found. id: ${card_id}`);
-    }
-    return card;
-  }
-
-  // 작성한 유저가 맞는지 확인하는 로직
-  // private async userCheck(user_id: number, cardUser_id: number) {}
 
   // 카드 내 코멘트 가져오는 로직
   private async getComment(card_id: number) {
