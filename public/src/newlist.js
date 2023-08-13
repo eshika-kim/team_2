@@ -401,3 +401,74 @@ function showCardModal(cardData) {
 
   cardModal.show();
 }
+
+const editCardTitleInput = document.querySelector('#editCardName');
+const editCardDescriptionInput = document.querySelector('#editCardDescription');
+const editCardColor = document.querySelector('#editCardColor');
+const editCardStatus = document.querySelector('#editCardStatus');
+const editCardDueDateInput = document.querySelector('#editCardDueDate');
+
+// 수정 버튼 클릭 시 수정 모달 띄우기
+const editCardButton = document.querySelector('#editCardButton');
+const editCardModal = new bootstrap.Modal(
+  document.getElementById('editCardModal'),
+);
+
+editCardButton.addEventListener('click', function (event) {
+  editCardTitleInput.value = cardTitle.textContent;
+  editCardDescriptionInput.value = cardDescription.textContent;
+  editCardColor.value = 'red';
+  editCardStatus.value = cardStatus.textContent;
+  editCardDueDateInput.value = changeDate(cardDueDate.textContent);
+  editCard(card_id);
+});
+
+// 수정 버튼 클릭 시 카드 정보를 수정하는 함수
+function editCard(cardId) {
+  // 카드 정보를 가져와 수정 모달에 표시
+  // 수정 모달 열기
+  cardModal.hide();
+  editCardModal.show();
+
+  // 수정 버튼 클릭 시 카드 정보 업데이트
+  const submitEditCardButton = document.querySelector('#submitEditCard');
+  submitEditCardButton.addEventListener('click', function () {
+    const updatedCardData = {
+      name: editCardTitleInput.value,
+      description: editCardDescriptionInput.value,
+      card_color: editCardColor.value,
+      status: editCardStatus.value,
+      dueDate: editCardDueDateInput.value,
+    };
+
+    // 카드 정보를 업데이트
+    axios
+      .put(`/card/${cardId}`, updatedCardData) // 적절한 엔드포인트로 수정해야 합니다
+      .then(() => {
+        alert('카드가 성공적으로 수정되었습니다.');
+
+        location.reload();
+      })
+      .catch((error) => {
+        console.log(error.request.response);
+      });
+  });
+}
+
+function changeDate(inputDateStr) {
+  // Date 객체로 변환
+  var inputDate = new Date(inputDateStr);
+
+  // 변환된 날짜와 시간 값을 추출
+  var year = inputDate.getFullYear();
+  var month = String(inputDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, padStart로 두 자리로 맞춤
+  var day = String(inputDate.getDate()).padStart(2, '0');
+  var hours = String(inputDate.getHours()).padStart(2, '0');
+  var minutes = String(inputDate.getMinutes()).padStart(2, '0');
+
+  // 결과 형식으로 조합
+  var outputDateStr =
+    year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+  return outputDateStr;
+}

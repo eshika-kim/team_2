@@ -238,8 +238,8 @@ document.addEventListener('DOMContentLoaded', function () {
             axios.post(`/board/member/${member.board_id}`).then((response) => {
               // 수락 성공 처리 로직
               alert('멤버 수락 완료:', response.data);
-              // 수락된 요청이므로 리스트 아이템 삭제
-              waitingList.removeChild(listItem);
+
+              location.reload();
             });
           });
 
