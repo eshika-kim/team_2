@@ -131,6 +131,59 @@
         </div>
     </div>
 
+    <!-- 카드 수정을 위한 모달 -->
+    <div class="modal fade" id="editCardModal" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCardModalLabel">카드 수정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCardForm">
+                        <div class="mb-3">
+                            <label for="editCardName" class="form-label">카드 이름</label>
+                            <input type="text" class="form-control" id="editCardName" placeholder="카드 이름을 입력하세요"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCardContent" class="form-label">카드 설명</label>
+                            <input class="form-control" id="editCardDescription" placeholder="카드 설명을 입력하세요"
+                                required></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color">Color:</label>
+                            <select id="editCardColor">
+                                <option value="red">red</option>
+                                <option value="blue">blue</option>
+                                <option value="yellow">yellow</option>
+                                <option value="green">green</option>
+                                <option value="gray">gray</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="todoStatus">Status:</label>
+                            <select id="editCardStatus">
+                                <option value="todo">todo</option>
+                                <option value="doing">doing</option>
+                                <option value="done">done</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateTime">Duedate:</label>
+                            <input type="datetime-local" id="editCardDueDate">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitEditCard">
+                        수정
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 카드 상세 정보 모달 -->
     <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -143,6 +196,10 @@
                     <div class="mb-3 d-flex align-items-center">
                         <h5 for="cardTitle" class="form-label me-3">카드 이름</h5>
                         <p id="cardTitle" class="mb-0"></p>
+                        <!-- 수정 버튼 -->
+                        <button type="button" id="editCardButton" class="btn btn-secondary btn-sm ms-auto">
+                            수정
+                        </button>
                     </div>
                     <div class="mb-3 d-flex align-items-center">
                         <h5 for="cardDescription" class="form-label me-3">카드 설명</h5>
@@ -175,6 +232,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Axios 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
