@@ -49,11 +49,19 @@ export class UserController {
     );
     response.cookie('Authentication', 'Bearer ' + authentication);
   }
+
+  @Get('/')
+  async getUser(@Req() request: RequestWithLocals) {
+    const userName = request.locals.user.name;
+    return userName;
+  }
+
   @Get('/logout')
   async logout(@Res() response: Response) {
     response.clearCookie('Authentication');
     response.status(200).send('Logged out successfully');
   }
+
   @Patch('/update')
   updateUser(@Body() data: UpdateUserDto, @Req() request: RequestWithLocals) {
     const auth = request.locals.user;
