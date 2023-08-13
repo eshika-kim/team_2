@@ -3,6 +3,56 @@ const urlParams = new URLSearchParams(queryString);
 const boardId = urlParams.get('boardId');
 
 document.addEventListener('DOMContentLoaded', function () {
+  // 쿠키값 확인하여 버튼 상태 설정
+  function checkLoginStatus() {
+    let cookies = document.cookie;
+    const userNameElement = document.querySelector('.user-name');
+    const cardContainer = document.querySelector('.list-container');
+    if (cookies.includes('Authentication=Bearer%20')) {
+      // 사용자 이름 가져오기
+      axios
+        .get('http://localhost:3000/user')
+        .then(function (response) {
+          const userName = response.data;
+          userNameElement.textContent = userName + '님 환영합니다';
+        })
+        .catch(function (error) {
+          console.error('Error fetching user data:', error);
+        });
+
+      // 보드 카드 컨테이너 가져오기
+
+      // axios
+      //   .get('http://localhost:3000/board')
+      //   .then(function (response) {
+      //     var jsonData = response.data;
+      //     // JSON 데이터를 기반으로 보드 카드 동적 생성
+      //     jsonData.forEach(function (boardData) {
+      //       var cardLink = document.createElement('a');
+      //       cardLink.href = 'newlist.html?boardId=' + boardData.board_id;
+      //       cardLink.className = 'card-link';
+      //       var cardDiv = document.createElement('div');
+      //       cardDiv.className = 'board';
+      //       var cardH2 = document.createElement('h5');
+      //       cardH2.textContent = boardData.name;
+      //       cardDiv.style.backgroundColor = boardData.color;
+      //       var cardP = document.createElement('p');
+      //       cardP.textContent = '설명: ' + boardData.description;
+
+      //       cardDiv.appendChild(cardH2);
+      //       cardDiv.appendChild(cardP);
+      //       cardLink.appendChild(cardDiv);
+      //       cardContainer.appendChild(cardLink); // 여기서 cardContainer를 사용
+      //     });
+      //   })
+      //   .catch(function (error) {
+      //     console.error('Error fetching board data:', error);
+      //   });
+    }
+  }
+
+  // 페이지 로드 시 쿠키값 확인
+  checkLoginStatus();
   const listContainer = document.querySelector('.list-container');
   axios({
     url: `http://localhost:3000/list/${boardId}`,
@@ -360,7 +410,7 @@ function showCardModal(cardData) {
   cardTitle.textContent = cardData[0].name;
   cardDescription.textContent = cardData[0].description;
   cardStatus.textContent = cardData[0].state;
-  cardDueDate.textContent = cardData[0].dueDate;
+  cardDueDate.textContent = formatDueDate(cardData[0].dueDate);
 
   const commentsData = cardData[1];
 
@@ -389,7 +439,7 @@ function showCardModal(cardData) {
     // 작성일 정보 표시
     const dateDiv = document.createElement('div');
     dateDiv.className = 'card-subtitle text-muted';
-    dateDiv.textContent = '작성일: ' + comment.createdAt;
+    dateDiv.textContent = '작성일: ' + formatDueDate(comment.createdAt);
     cardBody.appendChild(dateDiv);
 
     // 카드 바디를 댓글 카드에 추가
@@ -419,7 +469,7 @@ editCardButton.addEventListener('click', function (event) {
   editCardDescriptionInput.value = cardDescription.textContent;
   editCardColor.value = 'red';
   editCardStatus.value = cardStatus.textContent;
-  editCardDueDateInput.value = changeDate(cardDueDate.textContent);
+  editCardDueDateInput.value = formatDueDate(cardDueDate.textContent);
   editCard(card_id);
 });
 
@@ -455,20 +505,21 @@ function editCard(cardId) {
   });
 }
 
-function changeDate(inputDateStr) {
-  // Date 객체로 변환
-  var inputDate = new Date(inputDateStr);
+// YYYY-MM-DD 오전/오후 시:분 형식으로 변환하는 함수
+function formatDueDate(inputDateStr) {
+  const inputDate = new Date(inputDateStr);
 
-  // 변환된 날짜와 시간 값을 추출
-  var year = inputDate.getFullYear();
-  var month = String(inputDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, padStart로 두 자리로 맞춤
-  var day = String(inputDate.getDate()).padStart(2, '0');
-  var hours = String(inputDate.getHours()).padStart(2, '0');
-  var minutes = String(inputDate.getMinutes()).padStart(2, '0');
+  const year = inputDate.getFullYear();
+  const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+  const day = String(inputDate.getDate()).padStart(2, '0');
+  let hours = inputDate.getHours();
+  const ampm = hours >= 12 ? '오후' : '오전';
+  hours %= 12;
+  hours = hours || 12; // 0시일 경우 12시로 표시
+  const minutes = String(inputDate.getMinutes()).padStart(2, '0');
 
-  // 결과 형식으로 조합
-  var outputDateStr =
-    year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+  const outputDateStr =
+    year + '-' + month + '-' + day + ' ' + ampm + ' ' + hours + ':' + minutes;
 
   return outputDateStr;
 }
