@@ -3,16 +3,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const logoutButton = document.querySelector('.logout-button');
   const waitingButton = document.querySelector('.waiting-button');
   const createBoardButton = document.querySelector('.create-board-button');
+  const userNameElement = document.querySelector('.user-name'); // 사용자 이름
 
   // 쿠키값 확인하여 버튼 상태 설정
   function checkLoginStatus() {
     let cookies = document.cookie;
-    console.log(cookies);
     if (cookies.includes('Authentication=Bearer%20')) {
       loginButton.classList.add('d-none'); // 로그인 버튼 숨김
       logoutButton.classList.remove('d-none'); // 로그아웃 버튼 표시
       waitingButton.classList.remove('d-none'); // 멤버버튼 표시
       createBoardButton.classList.remove('d-none'); // 보드 생성 버튼 표시
+
+      // 사용자 이름 가져오기
+      axios
+        .get('http://localhost:3000/user')
+        .then(function (response) {
+          const userName = response.data;
+          userNameElement.textContent = userName + '님 환영합니다';
+        })
+        .catch(function (error) {
+          console.error('Error fetching user data:', error);
+        });
 
       var cardContainer = document.querySelector('.card-container');
       // 기존 카드 컨테이너 데이터 지우기

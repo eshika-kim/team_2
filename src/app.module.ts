@@ -53,6 +53,7 @@ export class AppModule implements NestModule {
       .apply(AuthMiddleware)
       .forRoutes(
         { path: 'user/update', method: RequestMethod.PUT },
+        { path: 'user', method: RequestMethod.GET },
         { path: 'board', method: RequestMethod.POST },
         { path: 'board', method: RequestMethod.GET },
         { path: 'board/:board_id', method: RequestMethod.GET },
